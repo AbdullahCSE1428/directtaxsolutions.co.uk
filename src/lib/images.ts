@@ -190,7 +190,7 @@ export async function ogImageSvg(): Promise<string> {
   const ltd = await line([{ text: 'LTD', font: 'mono', size: 13, fill: '#b3c0cf', tracking: 0.12 }], ltdX + 10, 99);
 
   const tagline = await line(
-    [{ text: 'ACCOUNTANTS · TAX ADVISORS · BUSINESS MENTORS', font: 'mono', size: 17, fill: '#b3c0cf', tracking: 0.08 }],
+    [{ text: 'CHARTERED ACCOUNTANTS · TAX ADVISORS · BUSINESS MENTORS', font: 'mono', size: 17, fill: '#b3c0cf', tracking: 0.08 }],
     left,
     566,
   );

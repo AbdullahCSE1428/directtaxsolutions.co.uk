@@ -38,9 +38,9 @@ export const formEndpoint = `https://formsubmit.co/${company.email}`;
 export const formAjaxEndpoint = `https://formsubmit.co/ajax/${company.email}`;
 
 export const seo = {
-  title: 'Direct Tax Solutions Ltd | Accountants & Tax Advisors in London',
+  title: 'Direct Tax Solutions Ltd | Chartered Accountants & Tax Advisors in London',
   description:
-    'London accountants, tax advisors and business mentors. Accounting, VAT, payroll, company formation and tax services for small and medium sized businesses.',
+    'London chartered accountants, tax advisors and business mentors. Accounting, VAT, payroll, company formation and tax services for small and medium sized businesses.',
 } as const;
 
 export const nav = [
@@ -69,7 +69,7 @@ export const about = {
   /** Revealed word by word on scroll; `key` segments are emphasised. */
   statement: [
     { text: 'Direct Tax Solutions Ltd is a firm of' },
-    { text: 'accountants, tax advisors and business mentors.', key: true },
+    { text: 'chartered accountants, tax advisors and business mentors.', key: true },
     { text: 'We have been supporting the growth of businesses just like yours.' },
   ],
   intro:

@@ -1,0 +1,52 @@
+---
+import Icon from '../components/Icon.astro';
+import StatusPage from '../components/StatusPage.astro';
+---
+
+<StatusPage
+  title="Thank you | Direct Tax Solutions Ltd"
+  kicker="Message sent"
+  heading="Thank you — your message has been sent"
+  text="We’ll be in touch as soon as possible."
+>
+  <svg slot="visual" class="thanks-check" viewBox="0 0 64 64" aria-hidden="true">
+    <circle cx="32" cy="32" r="29" pathLength="1"></circle>
+    <path d="M20 33.5l8 8 16.5-17" pathLength="1"></path>
+  </svg>
+  <a class="btn btn-primary" href="/">
+    Back to home
+    <Icon name="arrow-right" class="btn-arrow" />
+  </a>
+  <a class="btn btn-ghost" href="/#services">Explore our services</a>
+</StatusPage>
+
+<style>
+  .thanks-check {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .thanks-check circle {
+    fill: rgb(63 217 160 / 0.12);
+    stroke: var(--mint-400);
+    stroke-width: 2.5;
+    stroke-dasharray: 1;
+    animation: thanks-draw 1s var(--ease-in-out) 0.2s both;
+  }
+
+  .thanks-check path {
+    fill: none;
+    stroke: var(--mint-400);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    animation: thanks-draw 0.6s var(--ease-out) 0.9s both;
+  }
+
+  @keyframes thanks-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+</style>

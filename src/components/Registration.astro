@@ -1,0 +1,147 @@
+---
+import Icon from './Icon.astro';
+import Odometer from './Odometer.astro';
+import { company, links } from '../data/site';
+---
+
+<section class="registration" aria-label="Company registration">
+  <div class="container">
+    <div class="reg-card" data-reveal>
+      <div class="reg-item">
+        <span class="reg-icon"><Icon name="shield" size={22} /></span>
+        <p class="reg-text">
+          <span class="reg-kicker">Registered in</span>
+          <span class="reg-value">{company.jurisdiction}</span>
+        </p>
+      </div>
+
+      <span class="reg-divider" aria-hidden="true"></span>
+
+      <div class="reg-item reg-item--number">
+        <p class="reg-text">
+          <span class="reg-kicker">Company number</span>
+          <Odometer value={company.number} class="reg-odometer" />
+        </p>
+      </div>
+
+      <span class="reg-divider" aria-hidden="true"></span>
+
+      <a class="reg-link" href={links.companiesHouse} target="_blank" rel="noopener">
+        View on Companies House
+        <Icon name="arrow-up-right" size={18} />
+        <span class="sr-only">(opens in a new tab)</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .registration {
+    position: relative;
+    z-index: 3;
+    margin-top: -3.6rem;
+  }
+
+  .reg-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    padding: 1.15rem 1.4rem 1.15rem 1.2rem;
+    border: 1px solid var(--slate-100);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .reg-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .reg-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.95rem;
+    color: var(--brand-700);
+    background: var(--brand-50);
+  }
+
+  .reg-text {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .reg-kicker {
+    font-family: var(--font-code);
+    font-size: var(--step--2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate-500);
+  }
+
+  .reg-value {
+    color: var(--ink-900);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .reg-divider {
+    align-self: stretch;
+    width: 1px;
+    background: var(--slate-100);
+  }
+
+  .reg-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.8rem 1.1rem;
+    border-radius: 999px;
+    color: var(--ink-900);
+    background: var(--slate-50);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .reg-link :global(svg) {
+    transition: translate 0.35s var(--ease-out);
+  }
+
+  .reg-link:hover {
+    color: var(--white);
+    background: var(--ink-900);
+  }
+
+  .reg-link:hover :global(svg) {
+    translate: 2px -2px;
+  }
+
+  @media (max-width: 860px) {
+    .reg-card {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .reg-divider {
+      display: none;
+    }
+
+    .reg-item--number {
+      flex: 1 1 auto;
+    }
+
+    .reg-link {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

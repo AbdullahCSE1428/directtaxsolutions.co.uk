@@ -1,0 +1,96 @@
+---
+/**
+ * Digits that roll into place like a mechanical counter when their nearest
+ * `[data-reveal]` ancestor scrolls into view. Screen readers get the plain value.
+ */
+interface Props {
+  value: string;
+  class?: string;
+}
+
+const { value, class: className } = Astro.props;
+const reel = [...'01234567890123456789'];
+---
+
+<span class:list={['odometer', className]}>
+  <span class="sr-only">{value}</span>
+  <span class="odometer-digits" aria-hidden="true">
+    {
+      [...value].map((char, index) =>
+        /\d/.test(char) ? (
+          <span class="odometer-digit" style={`--d: ${char}; --i: ${index}`}>
+            <span class="odometer-reel">
+              {reel.map((digit) => (
+                <span>{digit}</span>
+              ))}
+            </span>
+          </span>
+        ) : (
+          <span class="odometer-sep">{char}</span>
+        ),
+      )
+    }
+  </span>
+</span>
+
+<style>
+  .odometer {
+    --cell-h: 1.5em;
+    display: inline-block;
+    font-family: var(--font-code);
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .odometer-digits {
+    display: inline-flex;
+    gap: 0.18rem;
+  }
+
+  .odometer-digit {
+    position: relative;
+    display: inline-block;
+    width: 1.12em;
+    height: var(--cell-h);
+    overflow: hidden;
+    border-radius: 0.3em;
+    color: var(--white);
+    background: linear-gradient(180deg, var(--ink-800), var(--ink-900));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.1),
+      inset 0 -6px 10px rgb(0 0 0 / 0.25);
+  }
+
+  /* the fold line of a mechanical counter */
+  .odometer-digit::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1px;
+    background: rgb(0 0 0 / 0.35);
+  }
+
+  .odometer-reel {
+    display: flex;
+    flex-direction: column;
+    translate: 0 calc((10 + var(--d)) * var(--cell-h) * -1);
+    transition: translate 2s cubic-bezier(0.2, 0.75, 0.2, 1);
+    transition-delay: calc(0.25s + var(--i) * 110ms);
+  }
+
+  .odometer-reel span {
+    display: grid;
+    place-items: center;
+    height: var(--cell-h);
+  }
+
+  :global(.js) :global([data-reveal]:not(.is-visible)) .odometer-reel {
+    translate: 0 0;
+  }
+
+  .odometer-sep {
+    align-self: center;
+    padding-inline: 0.1em;
+  }
+</style>

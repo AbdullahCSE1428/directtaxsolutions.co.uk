@@ -1,0 +1,86 @@
+---
+/** Layout for small utility pages (404, thank-you): a centred message on a dark stage. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+
+interface Props {
+  title: string;
+  kicker: string;
+  heading: string;
+  text: string;
+}
+
+const { title, kicker, heading, text } = Astro.props;
+---
+
+<BaseLayout title={title} noindex>
+  <Header />
+  <main id="main" tabindex="-1" class="status theme-dark">
+    <div class="status-bg" aria-hidden="true"></div>
+    <div class="container status-inner">
+      <div class="status-visual"><slot name="visual" /></div>
+      <p class="label" data-reveal>{kicker}</p>
+      <h1 class="status-title" data-reveal style="--stagger: 1">{heading}</h1>
+      <p class="status-text" data-reveal style="--stagger: 2">{text}</p>
+      <div class="status-actions" data-reveal style="--stagger: 3">
+        <slot />
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .status {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding-block: calc(var(--header-h) + 4rem) 5rem;
+    background: var(--ink-950);
+    overflow: clip;
+    text-align: center;
+  }
+
+  .status-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(45% 45% at 50% 30%, rgb(3 169 244 / 0.25), transparent 70%),
+      linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px) center / 72px 72px,
+      linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px) center / 72px 72px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000 30%, transparent 80%);
+  }
+
+  .status-inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+  }
+
+  .status-visual {
+    margin-bottom: 1rem;
+  }
+
+  .status-title {
+    max-width: 16ch;
+    font-size: var(--step-5);
+    letter-spacing: -0.045em;
+  }
+
+  .status-text {
+    max-width: 34rem;
+    font-size: var(--step-1);
+  }
+
+  .status-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+</style>

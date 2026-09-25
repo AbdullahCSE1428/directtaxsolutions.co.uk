@@ -1,0 +1,151 @@
+---
+/**
+ * “Who we work with” ribbon. The rows slide with the page scroll (never on
+ * their own), and fall back to a wrapped list when motion is reduced.
+ */
+import Icon from './Icon.astro';
+import { clientTypes } from '../data/site';
+---
+
+<section class="clients" aria-labelledby="clients-title">
+  <h2 id="clients-title" class="clients-title label">
+    <span class="label-index"><Icon name="check" size={13} strokeWidth={2.4} /></span> Who we work with
+  </h2>
+
+  <div class="clients-rows" data-clients>
+    {
+      clientTypes.map((row, rowIndex) => (
+        <div class:list={['clients-row', { 'clients-row--accent': rowIndex === 1 }]} data-row={rowIndex}>
+          {[0, 1].map((copy) => (
+            <ul class="clients-track" role="list" aria-hidden={copy === 1 ? 'true' : undefined}>
+              {row.map((item) => (
+                <li>
+                  <span class="clients-item">{item}</span>
+                  <svg class="clients-sep" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2.5c.6 5.2 4.3 8.9 9.5 9.5-5.2.6-8.9 4.3-9.5 9.5-.6-5.2-4.3-8.9-9.5-9.5 5.2-.6 8.9-4.3 9.5-9.5z" />
+                  </svg>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .clients {
+    position: relative;
+    padding-block: 0 clamp(4rem, 3rem + 4vw, 7rem);
+    background: var(--paper);
+    overflow: clip;
+  }
+
+  .clients-title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    color: var(--slate-500);
+  }
+
+  .clients-rows {
+    --p: 0.5;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .clients-row {
+    display: flex;
+    width: max-content;
+    will-change: translate;
+  }
+
+  .clients-row[data-row='0'] {
+    translate: calc(var(--p) * -25%) 0;
+  }
+
+  .clients-row[data-row='1'] {
+    translate: calc((var(--p) - 1) * 25%) 0;
+  }
+
+  .clients-track {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .clients-track li {
+    display: flex;
+    align-items: center;
+  }
+
+  .clients-item {
+    font-size: clamp(2rem, 1.2rem + 3.6vw, 4.6rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+    color: var(--ink-900);
+    white-space: nowrap;
+  }
+
+  .clients-row--accent .clients-item {
+    color: var(--brand-600);
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .clients-sep {
+    width: clamp(1.4rem, 1rem + 1.4vw, 2.4rem);
+    height: auto;
+    margin-inline: clamp(1rem, 0.6rem + 1.6vw, 2.2rem);
+    fill: var(--brand-500);
+  }
+
+  .clients-row--accent .clients-sep {
+    fill: var(--mint-500);
+  }
+
+  /* No JS or reduced motion: show every item, wrapped and centred. */
+  :global(.no-js) .clients-row,
+  .clients-rows[data-static] .clients-row {
+    width: auto;
+    translate: none;
+    justify-content: center;
+  }
+
+  :global(.no-js) .clients-track,
+  .clients-rows[data-static] .clients-track {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-inline: var(--gutter);
+  }
+
+  :global(.no-js) .clients-track[aria-hidden],
+  .clients-rows[data-static] .clients-track[aria-hidden] {
+    display: none;
+  }
+
+  :global(.no-js) .clients-item,
+  .clients-rows[data-static] .clients-item {
+    font-size: var(--step-3);
+  }
+</style>
+
+<script>
+  import { addScrollEffect } from '../scripts/scroll';
+  import { clamp, prefersReducedMotion } from '../scripts/motion';
+
+  const rows = document.querySelector<HTMLElement>('[data-clients]');
+  if (rows) {
+    if (prefersReducedMotion()) {
+      rows.setAttribute('data-static', '');
+    } else {
+      addScrollEffect(rows, (rect, viewportHeight) => {
+        const progress = clamp((viewportHeight - rect.top) / (viewportHeight + rect.height));
+        rows.style.setProperty('--p', progress.toFixed(4));
+      });
+    }
+  }
+</script>

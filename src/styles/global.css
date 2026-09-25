@@ -1,0 +1,468 @@
+/*
+ * Direct Tax Solutions — global design system.
+ * Tokens, base element styles and a handful of shared utilities.
+ * Component-specific styles live next to each component (scoped by Astro).
+ */
+
+@layer reset, base, utilities;
+
+:root {
+  /* Palette ------------------------------------------------------------- */
+  --ink-950: #040c17;
+  --ink-900: #07182b;
+  --ink-850: #0a1d33;
+  --ink-800: #0f2540;
+  --ink-700: #183354;
+  --ink-600: #274669;
+
+  --slate-700: #334155;
+  --slate-600: #46566b;
+  --slate-500: #5d6d82;
+  --slate-400: #8a99ad;
+  --slate-300: #b3c0cf;
+  --slate-200: #d6dee8;
+  --slate-100: #e8edf3;
+  --slate-50: #f2f5f9;
+  --paper: #f7f9fc;
+  --white: #ffffff;
+
+  --brand-50: #eaf7fe;
+  --brand-100: #d2effd;
+  --brand-200: #a6e0fb;
+  --brand-300: #6fcdf8;
+  --brand-400: #36baf6;
+  --brand-500: #03a9f4; /* original brand blue */
+  --brand-600: #0289cb;
+  --brand-700: #036ca1;
+  --brand-800: #07567f;
+
+  --mint-300: #7ee8c1;
+  --mint-400: #3fd9a0;
+  --mint-500: #14b881;
+  --marker: #ffe169;
+  --danger: #d93a3a;
+
+  /* Semantic (light surfaces by default) */
+  --heading: var(--ink-900);
+  --text: var(--slate-600);
+  --text-soft: var(--slate-500);
+  --line: var(--slate-100);
+  --accent: var(--brand-700);
+
+  /* Type ---------------------------------------------------------------- */
+  --font-body: var(--font-sans), system-ui, sans-serif;
+  --font-accent: var(--font-serif), Georgia, serif;
+  --font-code: var(--font-mono), ui-monospace, monospace;
+
+  --step--2: clamp(0.72rem, 0.7rem + 0.08vw, 0.78rem);
+  --step--1: clamp(0.84rem, 0.82rem + 0.1vw, 0.9rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
+  --step-1: clamp(1.18rem, 1.1rem + 0.35vw, 1.4rem);
+  --step-2: clamp(1.42rem, 1.26rem + 0.75vw, 1.9rem);
+  --step-3: clamp(1.75rem, 1.45rem + 1.45vw, 2.75rem);
+  --step-4: clamp(2.2rem, 1.6rem + 2.8vw, 4rem);
+  --step-5: clamp(2.6rem, 1.7rem + 4.1vw, 5.4rem);
+
+  /* Space & shape -------------------------------------------------------- */
+  --gutter: clamp(1.1rem, 0.6rem + 2.4vw, 2.5rem);
+  --container: 1220px;
+  --section-space: clamp(5rem, 3.2rem + 7vw, 9.5rem);
+  --header-h: 4.75rem;
+  --radius-sm: 12px;
+  --radius: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 34px;
+
+  /* Motion --------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Elevation ------------------------------------------------------------ */
+  --shadow-sm: 0 1px 2px rgb(7 24 43 / 0.06), 0 2px 8px -2px rgb(7 24 43 / 0.06);
+  --shadow-md: 0 2px 4px rgb(7 24 43 / 0.04), 0 12px 32px -12px rgb(7 24 43 / 0.18);
+  --shadow-lg: 0 4px 8px rgb(7 24 43 / 0.04), 0 30px 70px -24px rgb(7 24 43 / 0.32);
+}
+
+/* Dark surfaces re-map the semantic tokens. */
+.theme-dark {
+  --heading: var(--white);
+  --text: var(--slate-300);
+  --text-soft: var(--slate-400);
+  --line: rgb(255 255 255 / 0.09);
+  --accent: var(--brand-400);
+  color: var(--text);
+}
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  img,
+  picture,
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  ul[role='list'],
+  ol[role='list'] {
+    list-style: none;
+    padding: 0;
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-padding-top: calc(var(--header-h) + 1.5rem);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--ink-950);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    min-height: 100dvh;
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--paper);
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--heading);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.032em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand-500);
+    outline-offset: 3px;
+  }
+
+  /* <main> receives focus from the skip link; no ring needed on the whole page. */
+  main:focus {
+    outline: none;
+  }
+
+  ::selection {
+    background: var(--marker);
+    color: var(--ink-900);
+  }
+
+  /* Serif italic accent used inside headings. */
+  .accent {
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .container {
+    width: min(100% - 2 * var(--gutter), var(--container));
+    margin-inline: auto;
+  }
+
+  .section {
+    position: relative;
+    padding-block: var(--section-space);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* “(01) About us” style section labels */
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-code);
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .label-index {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.1rem;
+    height: 1.6rem;
+    padding-inline: 0.45rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    opacity: 0.9;
+  }
+
+  /* Buttons ----------------------------------------------------------- */
+  .btn {
+    --btn-h: 3.3rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    min-height: var(--btn-h);
+    padding: 0 1.55rem;
+    border-radius: 999px;
+    font-size: 0.97rem;
+    font-weight: 650;
+    letter-spacing: -0.005em;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    isolation: isolate;
+    overflow: hidden;
+    transition:
+      background-color 0.35s var(--ease-out),
+      border-color 0.35s var(--ease-out),
+      color 0.35s var(--ease-out),
+      box-shadow 0.35s var(--ease-out),
+      translate 0.35s var(--ease-out);
+  }
+
+  .btn-sm {
+    --btn-h: 2.6rem;
+    padding: 0 1.1rem;
+    font-size: 0.88rem;
+  }
+
+  .btn .btn-arrow {
+    width: 1.05em;
+    height: 1.05em;
+    transition: translate 0.35s var(--ease-out);
+  }
+
+  .btn:hover .btn-arrow {
+    translate: 3px 0;
+  }
+
+  .btn-primary {
+    color: var(--ink-950);
+    background: linear-gradient(180deg, var(--brand-400), var(--brand-500));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.4),
+      0 10px 28px -12px rgb(3 169 244 / 0.85);
+  }
+
+  /* A soft light sweep on hover */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / 0.45) 50%, transparent 70%);
+    translate: -110% 0;
+    transition: translate 0.8s var(--ease-out);
+  }
+
+  .btn-primary:hover {
+    translate: 0 -2px;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.4),
+      0 16px 36px -12px rgb(3 169 244 / 0.95);
+  }
+
+  .btn-primary:hover::after {
+    translate: 110% 0;
+  }
+
+  .btn-ghost {
+    color: var(--white);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    background: rgb(255 255 255 / 0.03);
+    backdrop-filter: blur(6px);
+  }
+
+  .btn-ghost:hover {
+    border-color: rgb(255 255 255 / 0.45);
+    background: rgb(255 255 255 / 0.08);
+  }
+
+  .btn-dark {
+    color: var(--white);
+    background: var(--ink-900);
+    box-shadow: 0 12px 28px -14px rgb(7 24 43 / 0.8);
+  }
+
+  .btn-dark:hover {
+    background: var(--ink-700);
+    translate: 0 -2px;
+  }
+
+  .btn-outline {
+    color: var(--ink-900);
+    border: 1px solid var(--slate-200);
+    background: var(--white);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--ink-900);
+  }
+
+  /* Highlighter-pen sweep behind key phrases */
+  .marker {
+    --marker-color: var(--marker);
+    background-image: linear-gradient(
+      100deg,
+      transparent 0.2em,
+      var(--marker-color) 0.2em,
+      var(--marker-color) calc(100% - 0.25em),
+      transparent calc(100% - 0.25em)
+    );
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 100% 42%;
+    padding-inline: 0.12em;
+    margin-inline: -0.12em;
+  }
+
+  .js .marker {
+    background-size: 0% 42%;
+    transition: background-size 1.2s var(--ease-in-out) 0.45s;
+  }
+
+  .js .is-visible .marker,
+  .js .marker.is-visible {
+    background-size: 100% 42%;
+  }
+
+  /* Scroll reveal ------------------------------------------------------- */
+  .js [data-reveal] {
+    opacity: 0;
+    translate: 0 1.75rem;
+    transition:
+      opacity 0.9s var(--ease-out),
+      translate 1s var(--ease-out),
+      scale 1s var(--ease-out);
+    transition-delay: calc(var(--stagger, 0) * 90ms);
+  }
+
+  .js [data-reveal='fade'] {
+    translate: none;
+  }
+
+  .js [data-reveal='scale'] {
+    translate: none;
+    scale: 0.96;
+  }
+
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+
+  /* Safety net: if scripts fail to boot, show everything. */
+  .reveal-all [data-reveal] {
+    opacity: 1 !important;
+    translate: none !important;
+    scale: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+
+  .js .marker {
+    background-size: 100% 42%;
+  }
+}
+
+@media print {
+  .js [data-reveal] {
+    opacity: 1 !important;
+    translate: none !important;
+  }
+
+  .site-header,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+}

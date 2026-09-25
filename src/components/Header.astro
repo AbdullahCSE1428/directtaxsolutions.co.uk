@@ -1,0 +1,423 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { company, links, nav } from '../data/site';
+---
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header" data-header>
+  <div class="header-bar">
+    <a class="brand" href="/#home" aria-label={`${company.name} — home`}>
+      <Logo idPrefix="header-logo" size={36} />
+      <span class="brand-name" aria-hidden="true">
+        Direct <span class="brand-tax">Tax</span> Solutions <span class="brand-ltd">Ltd</span>
+      </span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <ul role="list" data-nav-list>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} data-nav-link={item.id}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <span class="nav-pill" aria-hidden="true" data-nav-pill></span>
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn-primary btn-sm header-cta" href="/#contact">
+        Get in touch
+        <Icon name="arrow-right" class="btn-arrow" />
+      </a>
+      <button
+        class="menu-button"
+        type="button"
+        aria-haspopup="dialog"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        data-menu-open
+      >
+        <span class="sr-only">Open menu</span>
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="mobile-menu theme-dark" id="mobile-menu" aria-label="Site menu" data-menu>
+  <div class="mobile-menu-inner">
+    <div class="mobile-menu-top">
+      <span class="brand" aria-hidden="true">
+        <Logo idPrefix="menu-logo" size={34} />
+        <span class="brand-name">Direct <span class="brand-tax">Tax</span> Solutions</span>
+      </span>
+      <button class="menu-close" type="button" data-menu-close>
+        <span class="sr-only">Close menu</span>
+        <Icon name="close" size={22} />
+      </button>
+    </div>
+
+    <nav aria-label="Mobile">
+      <ol role="list" class="mobile-links">
+        {
+          nav.map((item, index) => (
+            <li style={`--i: ${index}`}>
+              <a href={item.href} data-menu-link>
+                <span class="mobile-link-index" aria-hidden="true">
+                  0{index + 1}
+                </span>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+
+    <div class="mobile-menu-contact">
+      <a class="btn btn-primary" href={links.phone}>
+        <Icon name="phone" size={18} />
+        Call {company.phone.display}
+      </a>
+      <a class="btn btn-ghost" href={links.whatsapp} target="_blank" rel="noopener">
+        <Icon name="chat" size={18} />
+        WhatsApp us
+      </a>
+      <a class="mobile-menu-email" href={links.email}>{company.email}</a>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.7rem 1.1rem;
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--ink-900);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    translate: 0 -200%;
+    transition: translate 0.3s var(--ease-out);
+  }
+
+  .skip-link:focus-visible {
+    translate: 0 0;
+  }
+
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    transition: padding 0.6s var(--ease-out);
+  }
+
+  .header-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: min(100% - 2 * var(--gutter), var(--container));
+    height: var(--header-h);
+    margin-inline: auto;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    transition:
+      width 0.7s var(--ease-out),
+      height 0.7s var(--ease-out),
+      padding 0.7s var(--ease-out),
+      background-color 0.5s ease,
+      border-color 0.5s ease,
+      box-shadow 0.5s ease;
+  }
+
+  .site-header[data-scrolled] {
+    padding-top: 0.7rem;
+  }
+
+  .site-header[data-scrolled] .header-bar {
+    width: min(100% - 1.4rem, 1100px);
+    height: 3.9rem;
+    padding-inline: 1rem 0.55rem;
+    background: rgb(7 24 43 / 0.74);
+    border-color: rgb(255 255 255 / 0.08);
+    box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.7);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+  }
+
+  /* Brand ---------------------------------------------------------------- */
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--white);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .brand :global(.logo-mark) {
+    transition: rotate 0.6s var(--ease-spring);
+  }
+
+  .brand:hover :global(.logo-mark) {
+    rotate: -8deg;
+  }
+
+  .brand-name {
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .brand-tax {
+    color: var(--brand-400);
+  }
+
+  .brand-ltd {
+    display: inline-block;
+    margin-left: 0.2rem;
+    padding: 0.18rem 0.4rem 0.14rem;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border-radius: 6px;
+    font-family: var(--font-code);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    vertical-align: 0.2em;
+    color: var(--slate-300);
+  }
+
+  /* Desktop nav ------------------------------------------------------------ */
+  .primary-nav {
+    position: relative;
+    margin-inline: auto;
+  }
+
+  .primary-nav ul {
+    display: flex;
+    gap: 0.2rem;
+  }
+
+  .primary-nav a {
+    position: relative;
+    z-index: 1;
+    display: block;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    color: rgb(255 255 255 / 0.72);
+    font-size: 0.92rem;
+    font-weight: 550;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .primary-nav a:hover,
+  .primary-nav a[aria-current] {
+    color: var(--white);
+  }
+
+  .nav-pill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--pill-w, 0);
+    translate: var(--pill-x, 0) 0;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+    opacity: 0;
+    transition:
+      translate 0.55s var(--ease-out),
+      width 0.55s var(--ease-out),
+      opacity 0.3s ease;
+  }
+
+  .nav-pill[data-ready] {
+    opacity: 1;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .menu-button,
+  .menu-close {
+    display: none;
+    place-items: center;
+    width: 2.9rem;
+    height: 2.9rem;
+    border-radius: 999px;
+    color: var(--white);
+    border: 1px solid rgb(255 255 255 / 0.16);
+    background: rgb(255 255 255 / 0.04);
+    transition: background-color 0.3s ease;
+  }
+
+  .menu-button:hover,
+  .menu-close:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  @media (max-width: 960px) {
+    .primary-nav {
+      display: none;
+    }
+
+    .header-actions {
+      margin-left: auto;
+    }
+
+    .menu-button {
+      display: grid;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .header-cta {
+      display: none;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .brand-name {
+      font-size: 0.92rem;
+    }
+
+    .brand-ltd {
+      display: none;
+    }
+  }
+
+  /* Mobile menu (native modal <dialog>) -------------------------------- */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--white);
+    background:
+      radial-gradient(90% 60% at 100% 0%, rgb(3 169 244 / 0.22), transparent 60%),
+      var(--ink-950);
+    opacity: 0;
+    transition:
+      opacity 0.4s var(--ease-out),
+      overlay 0.4s allow-discrete,
+      display 0.4s allow-discrete;
+  }
+
+  .mobile-menu[open] {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .mobile-menu[open] {
+      opacity: 0;
+    }
+  }
+
+  .mobile-menu::backdrop {
+    background: transparent;
+  }
+
+  .mobile-menu-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 1.1rem var(--gutter) 2rem;
+  }
+
+  .mobile-menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3.2rem;
+  }
+
+  .mobile-menu .menu-close {
+    display: grid;
+  }
+
+  .mobile-links {
+    margin-block: auto;
+    padding-block: 2.5rem;
+  }
+
+  .mobile-links li {
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .mobile-links a {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    font-size: clamp(2rem, 1.2rem + 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .mobile-link-index {
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--brand-400);
+  }
+
+  .mobile-menu[open] .mobile-links li {
+    animation: menu-item-in 0.7s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 70ms + 120ms);
+  }
+
+  @keyframes menu-item-in {
+    from {
+      opacity: 0;
+      translate: 0 1.5rem;
+    }
+  }
+
+  .mobile-menu-contact {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .mobile-menu-email {
+    margin-top: 0.4rem;
+    color: var(--slate-300);
+    text-align: center;
+    font-size: 0.95rem;
+  }
+
+  :global(html:has(.mobile-menu[open])) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  import { initHeader } from '../scripts/header';
+  initHeader();
+</script>

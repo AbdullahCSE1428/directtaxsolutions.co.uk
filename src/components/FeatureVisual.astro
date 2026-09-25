@@ -1,0 +1,295 @@
+---
+/**
+ * Small animated illustrations for the About feature cards. Each one plays
+ * when its card (a `[data-reveal]` element) scrolls into view.
+ */
+interface Props {
+  variant: 'ledger' | 'forecast' | 'variance';
+}
+
+const { variant } = Astro.props;
+
+const ledgerRows = [
+  { label: 96, amount: 54 },
+  { label: 124, amount: 40 },
+  { label: 80, amount: 62 },
+];
+
+const variance = [
+  { budget: 58, actual: 66 },
+  { budget: 74, actual: 62 },
+  { budget: 50, actual: 57 },
+  { budget: 82, actual: 90 },
+];
+---
+
+<div class:list={['fv', `fv--${variant}`]} aria-hidden="true">
+  {
+    variant === 'ledger' && (
+      <svg viewBox="0 0 300 150">
+        {ledgerRows.map((row, index) => (
+          <g class="fv-row" style={`--i: ${index}`} transform={`translate(0 ${22 + index * 30})`}>
+            <rect class="fv-label" x="18" y="0" width={row.label} height="9" rx="4.5" />
+            <rect class="fv-amount" x={236 - row.amount} y="0" width={row.amount} height="9" rx="4.5" />
+            <path class="fv-tick" d="M256 4.5l4 4 8-9" pathLength="1" />
+          </g>
+        ))}
+        <line class="fv-rule" x1="18" x2="282" y1="114" y2="114" />
+        <text class="fv-total-label" x="18" y="136">
+          TOTAL
+        </text>
+        <rect class="fv-total" x="160" y="126" width="76" height="11" rx="5.5" />
+        <path class="fv-double" d="M160 144.5h76M160 149h76" pathLength="1" />
+      </svg>
+    )
+  }
+  {
+    variant === 'forecast' && (
+      <svg viewBox="0 0 300 150">
+        <line class="fv-axis" x1="18" x2="282" y1="128" y2="128" />
+        <path class="fv-cone" d="M168 70 L282 22 L282 86 Z" />
+        <path class="fv-actual" d="M18 112 C44 108 58 96 80 98 S120 84 140 80 S160 72 168 70" pathLength="1" />
+        <path class="fv-forecast" d="M168 70 C196 62 232 56 282 50" pathLength="1" />
+        <line class="fv-today" x1="168" x2="168" y1="18" y2="128" />
+        <text class="fv-today-label" x="174" y="26">
+          TODAY
+        </text>
+        <circle class="fv-point" cx="168" cy="70" r="5.5" />
+        <circle class="fv-end" cx="282" cy="50" r="4.5" />
+      </svg>
+    )
+  }
+  {
+    variant === 'variance' && (
+      <svg viewBox="0 0 300 150">
+        <line class="fv-axis" x1="18" x2="282" y1="128" y2="128" />
+        {variance.map((item, index) => {
+          const gx = 34 + index * 66;
+          const over = item.actual >= item.budget;
+          return (
+            <g class="fv-group" style={`--i: ${index}`}>
+              <rect class="fv-budget" x={gx} y={128 - item.budget} width="18" height={item.budget} rx="5" />
+              <rect class="fv-actual-bar" x={gx + 22} y={128 - item.actual} width="18" height={item.actual} rx="5" />
+              <g
+                class:list={['fv-delta', over ? 'is-up' : 'is-down']}
+                transform={`translate(${gx + 20} ${128 - Math.max(item.budget, item.actual) - 16})`}
+              >
+                <path d={over ? 'M-5 3 0-3 5 3' : 'M-5-3 0 3 5-3'} />
+              </g>
+            </g>
+          );
+        })}
+      </svg>
+    )
+  }
+</div>
+
+<style>
+  .fv {
+    border-radius: var(--radius);
+    background:
+      linear-gradient(var(--slate-100) 1px, transparent 1px) 0 0 / 100% 30px,
+      var(--slate-50);
+    padding: 0.5rem 0.25rem;
+  }
+
+  .fv svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Shared “play when revealed” helpers */
+  :global(.js) :global([data-reveal]:not(.is-visible)) .fv * {
+    animation-play-state: paused !important;
+  }
+
+  /* Ledger --------------------------------------------------------------- */
+  .fv-label {
+    fill: var(--slate-200);
+  }
+
+  .fv-amount {
+    fill: var(--brand-300);
+  }
+
+  .fv-row {
+    animation: fv-fade 0.6s var(--ease-out) both;
+    animation-delay: calc(0.3s + var(--i) * 0.18s);
+  }
+
+  .fv-tick {
+    fill: none;
+    stroke: var(--mint-500);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    animation: fv-draw 0.45s var(--ease-out) both;
+    animation-delay: calc(0.75s + var(--i) * 0.3s);
+  }
+
+  .fv-rule {
+    stroke: var(--slate-300);
+    stroke-width: 1.5;
+  }
+
+  .fv-total-label,
+  .fv-today-label {
+    font-family: var(--font-code);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    fill: var(--slate-500);
+  }
+
+  .fv-total {
+    fill: var(--ink-800);
+    transform-box: fill-box;
+    transform-origin: 100% 50%;
+    animation: fv-grow-x 0.7s var(--ease-out) 1.7s both;
+  }
+
+  .fv-double {
+    fill: none;
+    stroke: var(--ink-800);
+    stroke-width: 1.6;
+    stroke-dasharray: 1;
+    animation: fv-draw 0.7s var(--ease-in-out) 2.1s both;
+  }
+
+  /* Forecast ------------------------------------------------------------- */
+  .fv-axis {
+    stroke: var(--slate-300);
+    stroke-width: 1.5;
+  }
+
+  .fv-actual {
+    fill: none;
+    stroke: var(--brand-500);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    animation: fv-draw 1.2s var(--ease-in-out) 0.35s both;
+  }
+
+  .fv-forecast {
+    fill: none;
+    stroke: var(--mint-500);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 0.035 0.03;
+    animation: fv-fade 0.8s ease 1.5s both;
+  }
+
+  .fv-cone {
+    fill: var(--mint-400);
+    opacity: 0.16;
+    animation: fv-fade-soft 1s ease 1.6s both;
+  }
+
+  .fv-today {
+    stroke: var(--slate-400);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+    animation: fv-fade 0.6s ease 1.3s both;
+  }
+
+  .fv-today-label {
+    animation: fv-fade 0.6s ease 1.35s both;
+  }
+
+  .fv-point {
+    fill: var(--white);
+    stroke: var(--brand-500);
+    stroke-width: 3;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: fv-pop 0.5s var(--ease-spring) 1.45s both;
+  }
+
+  .fv-end {
+    fill: var(--mint-500);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: fv-pop 0.5s var(--ease-spring) 2.2s both;
+  }
+
+  /* Variance ------------------------------------------------------------- */
+  .fv-budget {
+    fill: var(--slate-200);
+  }
+
+  .fv-actual-bar {
+    fill: var(--brand-500);
+  }
+
+  .fv-budget,
+  .fv-actual-bar {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: fv-grow-y 0.9s var(--ease-out) both;
+    animation-delay: calc(0.3s + var(--i) * 0.12s);
+  }
+
+  .fv-actual-bar {
+    animation-delay: calc(0.45s + var(--i) * 0.12s);
+  }
+
+  .fv-delta path {
+    fill: none;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .fv-delta.is-up path {
+    stroke: var(--mint-500);
+  }
+
+  .fv-delta.is-down path {
+    stroke: #e0901b;
+  }
+
+  .fv-delta {
+    animation: fv-fade 0.5s ease both;
+    animation-delay: calc(1.2s + var(--i) * 0.12s);
+  }
+
+  @keyframes fv-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  @keyframes fv-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fv-fade-soft {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fv-grow-x {
+    from {
+      scale: 0 1;
+    }
+  }
+
+  @keyframes fv-grow-y {
+    from {
+      scale: 1 0;
+    }
+  }
+
+  @keyframes fv-pop {
+    from {
+      opacity: 0;
+      scale: 0.3;
+    }
+  }
+</style>

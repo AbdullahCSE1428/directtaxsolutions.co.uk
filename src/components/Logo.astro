@@ -1,0 +1,46 @@
+---
+/**
+ * The brand mark: an audit tick whose long stroke becomes a growth arrow —
+ * “checked, filed and moving forward”.
+ */
+import { logoMark } from '../data/brand';
+
+interface Props {
+  size?: number;
+  /** Unique prefix so several logos can share a page without clashing gradient ids. */
+  idPrefix?: string;
+  class?: string;
+}
+
+const { size = 36, idPrefix = 'logo', class: className } = Astro.props;
+const gradientId = `${idPrefix}-gradient`;
+---
+
+<svg
+  class:list={['logo-mark', className]}
+  width={size}
+  height={size}
+  viewBox="0 0 64 64"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <linearGradient id={gradientId} x1="6" y1="2" x2="58" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color={logoMark.gradient[0]}></stop>
+      <stop offset="1" stop-color={logoMark.gradient[1]}></stop>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx={logoMark.radius} fill={`url(#${gradientId})`}></rect>
+  <path class="logo-tick" d={logoMark.tick} pathLength="1"></path>
+  <path class="logo-head" d={logoMark.head} pathLength="1"></path>
+</svg>
+
+<style>
+  .logo-mark path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

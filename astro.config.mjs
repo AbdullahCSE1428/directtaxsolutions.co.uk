@@ -9,6 +9,10 @@ const fontsource = (/** @type {string} */ path) => `./node_modules/@fontsource${
 
 export default defineConfig({
   site: 'https://directtaxsolutions.co.uk',
+  build: {
+    // One small page: inlining the CSS saves render-blocking round trips.
+    inlineStylesheets: 'always',
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/thank-you'),

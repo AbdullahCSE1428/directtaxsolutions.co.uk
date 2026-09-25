@@ -134,6 +134,13 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
     color: var(--brand-700);
   }
 
+  /* Visitors who ask for more contrast get the plain, fully legible text. */
+  @media (prefers-contrast: more) {
+    .sw {
+      opacity: 1;
+    }
+  }
+
   /* Intro + audiences --------------------------------------------------- */
   .about-intro {
     display: grid;
@@ -413,8 +420,9 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
   // Words brighten one after another as the statement scrolls up the screen,
   // finishing by the time it reaches the middle of the viewport.
   if (!prefersReducedMotion()) {
+    // The text stays fully legible until the effect wakes up just below the
+    // viewport, so it never sits dimmed where nobody can scroll it into place.
     document.querySelectorAll<HTMLElement>('[data-scroll-text]').forEach((el) => {
-      el.style.setProperty('--p', '0');
       addScrollEffect(el, (rect, viewportHeight) => {
         const progress = clamp((viewportHeight * 0.9 - rect.top) / (viewportHeight * 0.45));
         el.style.setProperty('--p', progress.toFixed(3));

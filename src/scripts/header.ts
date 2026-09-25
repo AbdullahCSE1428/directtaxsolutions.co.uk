@@ -28,11 +28,11 @@ function initScrollSpy(header: HTMLElement): void {
     if (!animate) pill.style.transition = 'none';
     pill.style.setProperty('--pill-x', `${active.offsetLeft}px`);
     pill.style.setProperty('--pill-w', `${active.offsetWidth}px`);
-    if (!animate) {
-      void pill.offsetWidth; // commit the jump before re-enabling transitions
-      pill.style.removeProperty('transition');
-    }
     pill.setAttribute('data-ready', '');
+    if (!animate) {
+      // Re-enable transitions once the jump has been painted (no forced reflow).
+      requestAnimationFrame(() => requestAnimationFrame(() => pill.style.removeProperty('transition')));
+    }
   };
 
   const setActive = (id: string) => {

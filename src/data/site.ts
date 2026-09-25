@@ -57,13 +57,13 @@ export const hero = {
     { text: 'Committed to helping you reach the' },
     { text: 'right accounting solution', accent: true },
   ],
-  lead: 'Providing expert accountancy guidance and support to small and medium sized businesses.',
+  lead: 'Providing expert chartered accountancy guidance and support to small and medium sized businesses.',
   audiences: ['New business start-ups', 'Established organisations', 'Rapidly growing concerns'],
 } as const;
 
 export const about = {
   heading: {
-    before: 'An emerging accountancy firm with',
+    before: 'An emerging chartered accountancy firm with',
     highlight: 'several years of experience',
   },
   /** Revealed word by word on scroll; `key` segments are emphasised. */

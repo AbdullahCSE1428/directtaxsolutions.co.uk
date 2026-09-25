@@ -127,7 +127,7 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
   }
 
   .sw {
-    opacity: calc(0.14 + 0.86 * clamp(0, (var(--p) * (var(--n) + 6) - var(--i)) / 6, 1));
+    opacity: calc(0.22 + 0.78 * clamp(0, (var(--p) * (var(--n) + 6) - var(--i)) / 6, 1));
   }
 
   .sw.is-key {
@@ -410,12 +410,13 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
   import { addScrollEffect } from '../scripts/scroll';
   import { clamp, prefersReducedMotion } from '../scripts/motion';
 
-  // Words brighten one after another as the statement scrolls up the screen.
+  // Words brighten one after another as the statement scrolls up the screen,
+  // finishing by the time it reaches the middle of the viewport.
   if (!prefersReducedMotion()) {
     document.querySelectorAll<HTMLElement>('[data-scroll-text]').forEach((el) => {
       el.style.setProperty('--p', '0');
       addScrollEffect(el, (rect, viewportHeight) => {
-        const progress = clamp((viewportHeight * 0.88 - rect.top) / (viewportHeight * 0.55));
+        const progress = clamp((viewportHeight * 0.9 - rect.top) / (viewportHeight * 0.45));
         el.style.setProperty('--p', progress.toFixed(3));
       });
     });

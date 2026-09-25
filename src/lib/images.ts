@@ -101,7 +101,7 @@ async function measure(runs: Run[]): Promise<number> {
   return (await line(runs, 0, 0)).width;
 }
 
-export async function renderPng(svg: string, width: number, height = width): Promise<Uint8Array> {
+export async function renderPng(svg: string, width: number, height = width): Promise<Uint8Array<ArrayBuffer>> {
   const png = await sharp(Buffer.from(svg), { density: 144 })
     .resize(width, height)
     .png({ compressionLevel: 9 })
@@ -109,12 +109,12 @@ export async function renderPng(svg: string, width: number, height = width): Pro
   return new Uint8Array(png);
 }
 
-export function iconPng(size: number, options: { rounded?: boolean } = {}): Promise<Uint8Array> {
+export function iconPng(size: number, options: { rounded?: boolean } = {}): Promise<Uint8Array<ArrayBuffer>> {
   return renderPng(logoMarkSvg(512, options), size);
 }
 
 /** Packs PNG images into a .ico container (PNG-in-ICO, supported everywhere today). */
-export function createIco(images: Array<{ size: number; data: Uint8Array }>): Uint8Array {
+export function createIco(images: Array<{ size: number; data: Uint8Array }>): Uint8Array<ArrayBuffer> {
   const headerSize = 6 + 16 * images.length;
   const totalSize = headerSize + images.reduce((sum, image) => sum + image.data.length, 0);
   const bytes = new Uint8Array(totalSize);

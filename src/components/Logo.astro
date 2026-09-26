@@ -1,6 +1,6 @@
 ---
 /**
- * The brand mark: a lowercase “dt” ligature (Direct Tax) in a blue-to-mint
+ * The brand mark: a capital “DT” ligature (Direct Tax) in a blue-to-mint
  * gradient. Geometry lives in src/data/brand.ts.
  */
 import { logoMark } from '../data/brand';
@@ -30,9 +30,7 @@ const gradientId = `${idPrefix}-gradient`;
     </linearGradient>
   </defs>
   <g stroke={`url(#${gradientId})`} stroke-width={logoMark.strokeWidth}>
-    <circle cx={logoMark.bowl.cx} cy={logoMark.bowl.cy} r={logoMark.bowl.r}></circle>
-    <path d={logoMark.stem}></path>
-    <path d={logoMark.bar}></path>
+    {logoMark.strokes.map((d) => <path d={d} />)}
   </g>
 </svg>
 
@@ -40,5 +38,6 @@ const gradientId = `${idPrefix}-gradient`;
   .logo-mark g {
     fill: none;
     stroke-linecap: round;
+    stroke-linejoin: round;
   }
 </style>

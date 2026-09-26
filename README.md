@@ -39,9 +39,10 @@ for search engines together. (The wording on the social share image is drawn in 
 Other things you might touch:
 
 - **Colours, type scale, spacing** — design tokens at the top of `src/styles/global.css`.
-- **Logo** — a lowercase “dt” ligature (Direct Tax) in a blue-to-mint gradient, with a heavy/light
-  wordmark. Geometry and colours live in `src/data/brand.ts`; it is used by the header, footer,
-  favicons, app icons and social image.
+- **Logo** — a capital “DT” ligature (Direct Tax), where the top of the D runs on into the T's
+  crossbar, in a blue-to-mint gradient, beside the “Direct Tax Solutions Ltd” wordmark (“Tax” in blue).
+  Geometry and colours live in `src/data/brand.ts`; it is used by the header, footer, favicons, app
+  icons and social image.
 - **Making Tax Digital panel** — the `mtd` export in `src/data/site.ts`, including the rollout dates.
 - **Photos** — `src/assets/images/`; Astro converts them to responsive AVIF/WebP at build time.
 

@@ -3,8 +3,8 @@
  * <Logo /> component and the build-time images (favicons, app icons, social
  * image and the downloadable logo files under /brand/).
  *
- * The mark is a lowercase “dt” ligature (Direct Tax): the bowl and stem of the
- * “d” share their stem with the “t”, drawn as one monoline in a blue-to-mint
+ * The mark is a capital “DT” ligature (Direct Tax): the top of the “D” runs on
+ * to become the crossbar of the “T”, drawn as one monoline in a blue-to-mint
  * gradient that rises from bottom-left to top-right.
  */
 export const logoMark = {
@@ -13,10 +13,9 @@ export const logoMark = {
     [0.55, '#0ea5e9'],
     [1, '#34d399'],
   ],
-  strokeWidth: 8.5,
-  bowl: { cx: 25.25, cy: 41.5, r: 12 },
-  stem: 'M37.25 10.5v43',
-  bar: 'M29.25 19.5h21.5',
+  strokeWidth: 8,
+  /** Strokes in drawing order: the D's stem and bowl, the shared top bar, the T's stem. */
+  strokes: ['M8 14V50h9a15 18 0 0 0 0-36', 'M8 14h48', 'M45.5 14v36'],
   /** Background tile used where the mark needs a solid square (app icons, favicons). */
   tile: '#07182b',
   tileRadius: 15,
@@ -41,11 +40,10 @@ export function logoGradient(id: string): string {
     .join('')}</linearGradient>`;
 }
 
-/** The “dt” glyph as SVG elements in the 64×64 box, stroked with gradient `id`. */
+/** The “DT” glyph as SVG elements in the 64×64 box, stroked with gradient `id`. */
 export function logoGlyph(id: string): string {
-  const { bowl } = logoMark;
-  return `<g fill="none" stroke="url(#${id})" stroke-width="${logoMark.strokeWidth}" stroke-linecap="round">
-    <circle cx="${bowl.cx}" cy="${bowl.cy}" r="${bowl.r}"/><path d="${logoMark.stem}"/><path d="${logoMark.bar}"/>
+  return `<g fill="none" stroke="url(#${id})" stroke-width="${logoMark.strokeWidth}" stroke-linecap="round" stroke-linejoin="round">
+    ${logoMark.strokes.map((d) => `<path d="${d}"/>`).join('')}
   </g>`;
 }
 

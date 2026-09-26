@@ -11,7 +11,7 @@ import { company, links, nav } from '../data/site';
     <a class="brand" href="/#home" aria-label={`${company.name}, ${company.designation} — home`}>
       <Logo idPrefix="header-logo" size={36} />
       <span class="brand-text" aria-hidden="true">
-        <span class="brand-name"><span class="brand-strong">Direct Tax</span> Solutions</span>
+        <span class="brand-name"><span class="brand-strong">Direct <span class="brand-tax">Tax</span></span> Solutions Ltd</span>
         <span class="brand-designation">{company.designation}</span>
       </span>
     </a>
@@ -57,7 +57,7 @@ import { company, links, nav } from '../data/site';
       <span class="brand" aria-hidden="true">
         <Logo idPrefix="menu-logo" size={34} />
         <span class="brand-text">
-          <span class="brand-name"><span class="brand-strong">Direct Tax</span> Solutions</span>
+          <span class="brand-name"><span class="brand-strong">Direct <span class="brand-tax">Tax</span></span> Solutions Ltd</span>
           <span class="brand-designation">{company.designation}</span>
         </span>
       </span>
@@ -181,7 +181,7 @@ import { company, links, nav } from '../data/site';
     gap: 0.28rem;
   }
 
-  /* Wordmark: heavy “Direct Tax”, light “Solutions” — as in the logo. */
+  /* Wordmark: heavy “Direct Tax” (with “Tax” in blue), light “Solutions Ltd” — as in the logo. */
   .brand-name {
     font-size: 1.08rem;
     font-weight: 300;
@@ -193,6 +193,10 @@ import { company, links, nav } from '../data/site';
   .brand-strong {
     font-weight: 800;
     letter-spacing: -0.03em;
+  }
+
+  .brand-tax {
+    color: var(--brand-400);
   }
 
   .brand-designation {

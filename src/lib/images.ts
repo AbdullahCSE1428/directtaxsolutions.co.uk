@@ -143,22 +143,24 @@ export function createIco(images: Array<{ size: number; data: Uint8Array }>): Ui
 type LogoTheme = 'dark' | 'light';
 
 /**
- * The horizontal logo lockup — mark, “Direct Tax Solutions” and the ACCA
+ * The horizontal logo lockup — mark, “Direct Tax Solutions Ltd” and the ACCA
  * designation sized to the same width — as SVG elements with text as paths.
  * `height` is the height of the mark; everything else scales with it.
  */
 export async function logoLockup(theme: LogoTheme, x: number, y: number, height: number, id = 'lockup') {
   const k = height / 64;
   const ink = theme === 'dark' ? '#ffffff' : c.ink900;
+  const accent = theme === 'dark' ? c.brand400 : c.brand600;
   const muted = theme === 'dark' ? c.slate300 : c.slate600;
   const textX = x + height + 16 * k;
   const nameSize = 30 * k;
 
-  // Wordmark: heavy “Direct Tax”, light “Solutions”.
+  // Wordmark: heavy “Direct Tax” (with “Tax” in blue), light “Solutions Ltd”.
   const name = await line(
     [
-      { text: 'Direct Tax', font: 'sansHeavy', size: nameSize, fill: ink, tracking: -0.03 },
-      { text: ' Solutions', font: 'sansLight', size: nameSize, fill: ink, tracking: -0.02 },
+      { text: 'Direct ', font: 'sansHeavy', size: nameSize, fill: ink, tracking: -0.03 },
+      { text: 'Tax', font: 'sansHeavy', size: nameSize, fill: accent, tracking: -0.03 },
+      { text: ' Solutions Ltd', font: 'sansLight', size: nameSize, fill: ink, tracking: -0.02 },
     ],
     textX,
     y + 31 * k,

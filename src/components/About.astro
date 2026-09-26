@@ -2,7 +2,7 @@
 import FeatureVisual from './FeatureVisual.astro';
 import Icon, { type IconName } from './Icon.astro';
 import { logoMark } from '../data/brand';
-import { about } from '../data/site';
+import { about, sectionNumber } from '../data/site';
 
 const statementWords = about.statement.flatMap((segment) =>
   segment.text.split(' ').map((text) => ({ text, key: 'key' in segment && segment.key })),
@@ -18,7 +18,7 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
 <section id="about" class="about section" aria-labelledby="about-title">
   <div class="container">
     <header class="about-head">
-      <p class="label" data-reveal><span class="label-index">01</span> About us</p>
+      <p class="label" data-reveal><span class="label-index">{sectionNumber('about')}</span> About us</p>
       <h2 id="about-title" class="about-title" data-reveal style="--stagger: 1">
         {about.heading.before} <span class="marker">{about.heading.highlight}</span>
       </h2>

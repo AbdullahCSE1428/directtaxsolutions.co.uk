@@ -52,6 +52,11 @@ export const nav = [
   { label: 'Contact', href: '/#contact', id: 'contact' },
 ] as const;
 
+/** Two-digit section number matching the menu order (Home 01, About 02, …). */
+export function sectionNumber(id: (typeof nav)[number]['id']): string {
+  return String(nav.findIndex((item) => item.id === id) + 1).padStart(2, '0');
+}
+
 export const hero = {
   eyebrow: 'Welcome to Direct Tax Solutions Ltd',
   // The title is split so the accent words can be styled differently.

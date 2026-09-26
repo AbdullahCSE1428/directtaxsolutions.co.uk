@@ -1,7 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 import '../styles/global.css';
-import { company, seo, services } from '../data/site';
+import { company, mtd, seo, services } from '../data/site';
 
 interface Props {
   title?: string;
@@ -42,9 +42,9 @@ const structuredData = {
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Chartered certified accountancy and tax services',
-    itemListElement: services.map((service) => ({
+    itemListElement: [...services.map((service) => service.title), mtd.label].map((name) => ({
       '@type': 'Offer',
-      itemOffered: { '@type': 'Service', name: service.title },
+      itemOffered: { '@type': 'Service', name },
     })),
   },
 };

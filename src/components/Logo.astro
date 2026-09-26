@@ -1,7 +1,7 @@
 ---
 /**
- * The brand mark: a “D” monogram (for Direct) with a rising arrow in its
- * counter, on a deep blue tile. Geometry lives in src/data/brand.ts.
+ * The brand mark: a lowercase “dt” ligature (Direct Tax) in a blue-to-mint
+ * gradient. Geometry lives in src/data/brand.ts.
  */
 import { logoMark } from '../data/brand';
 
@@ -25,21 +25,20 @@ const gradientId = `${idPrefix}-gradient`;
   focusable="false"
 >
   <defs>
-    <linearGradient id={gradientId} x1="6" y1="2" x2="58" y2="62" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color={logoMark.gradient[0]}></stop>
-      <stop offset="1" stop-color={logoMark.gradient[1]}></stop>
+    <linearGradient id={gradientId} x1="8" y1="58" x2="56" y2="6" gradientUnits="userSpaceOnUse">
+      {logoMark.gradient.map(([offset, color]) => <stop offset={offset} stop-color={color} />)}
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx={logoMark.radius} fill={`url(#${gradientId})`}></rect>
-  <path class="logo-letter" d={logoMark.letter} stroke-width={logoMark.letterWidth}></path>
-  {logoMark.arrow.map((d) => <path class="logo-arrow" d={d} stroke-width={logoMark.arrowWidth} />)}
+  <g stroke={`url(#${gradientId})`} stroke-width={logoMark.strokeWidth}>
+    <circle cx={logoMark.bowl.cx} cy={logoMark.bowl.cy} r={logoMark.bowl.r}></circle>
+    <path d={logoMark.stem}></path>
+    <path d={logoMark.bar}></path>
+  </g>
 </svg>
 
 <style>
-  .logo-mark path {
+  .logo-mark g {
     fill: none;
-    stroke: #fff;
     stroke-linecap: round;
-    stroke-linejoin: round;
   }
 </style>

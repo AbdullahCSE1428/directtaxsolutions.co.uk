@@ -20,6 +20,8 @@ type Font = opentypeModule.Font;
 const fontFiles = {
   sans: '@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff',
   sansSemi: '@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff',
+  sansHeavy: '@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-800-normal.woff',
+  sansLight: '@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-300-normal.woff',
   serif: '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff',
   mono: '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff',
 } as const;
@@ -148,19 +150,18 @@ type LogoTheme = 'dark' | 'light';
 export async function logoLockup(theme: LogoTheme, x: number, y: number, height: number, id = 'lockup') {
   const k = height / 64;
   const ink = theme === 'dark' ? '#ffffff' : c.ink900;
-  const accent = theme === 'dark' ? c.brand400 : c.brand600;
   const muted = theme === 'dark' ? c.slate300 : c.slate600;
-  const textX = x + height + 18 * k;
+  const textX = x + height + 16 * k;
   const nameSize = 30 * k;
 
+  // Wordmark: heavy “Direct Tax”, light “Solutions”.
   const name = await line(
     [
-      { text: 'Direct ', font: 'sans', size: nameSize, fill: ink, tracking: -0.02 },
-      { text: 'Tax', font: 'sans', size: nameSize, fill: accent, tracking: -0.02 },
-      { text: ' Solutions', font: 'sans', size: nameSize, fill: ink, tracking: -0.02 },
+      { text: 'Direct Tax', font: 'sansHeavy', size: nameSize, fill: ink, tracking: -0.03 },
+      { text: ' Solutions', font: 'sansLight', size: nameSize, fill: ink, tracking: -0.02 },
     ],
     textX,
-    y + 30 * k,
+    y + 31 * k,
   );
 
   // The designation line is sized so it spans exactly the name's width.
@@ -170,17 +171,17 @@ export async function logoLockup(theme: LogoTheme, x: number, y: number, height:
   const designation = await line([{ text: label, font: 'mono', size: labelSize, fill: muted, tracking: 0.12 }], textX + k, y + 52 * k);
 
   const svg = `<defs>${logoGradient(id)}</defs>
-  <g transform="translate(${x} ${y}) scale(${k})">
-    <rect width="64" height="64" rx="16" fill="url(#${id})"/>
-    ${logoGlyph()}
-  </g>
+  <g transform="translate(${x} ${y}) scale(${k})">${logoGlyph(id)}</g>
   ${name.svg}${designation.svg}`;
   return { svg, width: textX - x + name.width, height };
 }
 
 /** A standalone logo file for the brand kit (transparent background). */
-export async function brandLogoSvg(variant: 'logo-light' | 'logo-dark' | 'logo-mark'): Promise<{ svg: string; width: number; height: number }> {
+export type BrandLogo = 'logo-light' | 'logo-dark' | 'logo-mark' | 'logo-symbol';
+
+export async function brandLogoSvg(variant: BrandLogo): Promise<{ svg: string; width: number; height: number }> {
   if (variant === 'logo-mark') return { svg: logoMarkSvg(512), width: 512, height: 512 };
+  if (variant === 'logo-symbol') return { svg: logoMarkSvg(512, { tile: false }), width: 512, height: 512 };
   const pad = 8;
   const lockup = await logoLockup(variant === 'logo-dark' ? 'dark' : 'light', pad, pad, 64);
   const width = Math.ceil(lockup.width + pad * 2);

@@ -75,8 +75,9 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
     <div class="vision theme-dark" data-reveal>
       <div class="vision-bg" aria-hidden="true"></div>
       <svg class="vision-mark" viewBox="0 0 64 64" aria-hidden="true">
-        <path d={logoMark.letter} pathLength="1"></path>
-        {logoMark.arrow.map((d) => <path d={d} pathLength="1" />)}
+        <circle cx={logoMark.bowl.cx} cy={logoMark.bowl.cy} r={logoMark.bowl.r} pathLength="1"></circle>
+        <path d={logoMark.stem} pathLength="1"></path>
+        <path d={logoMark.bar} pathLength="1"></path>
       </svg>
       <div class="vision-content">
         <h3 class="label vision-label">
@@ -306,22 +307,26 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
     opacity: 0.2;
   }
 
-  .vision-mark path {
+  .vision-mark :is(circle, path) {
     fill: none;
     stroke: var(--brand-300);
     stroke-width: 4;
     stroke-linecap: round;
-    stroke-linejoin: round;
     stroke-dasharray: 1;
     stroke-dashoffset: 0;
-    transition: stroke-dashoffset 1.6s var(--ease-in-out) 0.5s;
+    transition: stroke-dashoffset 1.4s var(--ease-in-out) 0.5s;
+  }
+
+  /* bowl, then stem, then crossbar */
+  .vision-mark path {
+    transition-delay: 1.2s;
   }
 
   .vision-mark path + path {
-    transition-delay: 1.5s;
+    transition-delay: 1.8s;
   }
 
-  :global(.js) .vision:not(.is-visible) .vision-mark path {
+  :global(.js) .vision:not(.is-visible) .vision-mark :is(circle, path) {
     stroke-dashoffset: 1;
   }
 

@@ -8,10 +8,13 @@ import { company, links, nav } from '../data/site';
 
 <header class="site-header" data-header>
   <div class="header-bar">
-    <a class="brand" href="/#home" aria-label={`${company.name} — home`}>
+    <a class="brand" href="/#home" aria-label={`${company.name}, ${company.designation} — home`}>
       <Logo idPrefix="header-logo" size={36} />
-      <span class="brand-name" aria-hidden="true">
-        Direct <span class="brand-tax">Tax</span> Solutions <span class="brand-ltd">Ltd</span>
+      <span class="brand-text" aria-hidden="true">
+        <span class="brand-name">
+          Direct <span class="brand-tax">Tax</span> Solutions <span class="brand-ltd">Ltd</span>
+        </span>
+        <span class="brand-designation">{company.designation}</span>
       </span>
     </a>
 
@@ -55,7 +58,10 @@ import { company, links, nav } from '../data/site';
     <div class="mobile-menu-top">
       <span class="brand" aria-hidden="true">
         <Logo idPrefix="menu-logo" size={34} />
-        <span class="brand-name">Direct <span class="brand-tax">Tax</span> Solutions</span>
+        <span class="brand-text">
+          <span class="brand-name">Direct <span class="brand-tax">Tax</span> Solutions</span>
+          <span class="brand-designation">{company.designation}</span>
+        </span>
       </span>
       <button class="menu-close" type="button" data-menu-close>
         <span class="sr-only">Close menu</span>
@@ -172,11 +178,28 @@ import { company, links, nav } from '../data/site';
     rotate: -8deg;
   }
 
+  .brand-text {
+    display: grid;
+    gap: 0.28rem;
+  }
+
   .brand-name {
     font-size: 1.02rem;
     font-weight: 700;
     letter-spacing: -0.02em;
+    line-height: 1.1;
     white-space: nowrap;
+  }
+
+  .brand-designation {
+    font-family: var(--font-code);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--slate-300);
   }
 
   .brand-tax {
@@ -293,13 +316,54 @@ import { company, links, nav } from '../data/site';
     }
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 1120px) and (min-width: 961px) {
+    .primary-nav a {
+      padding-inline: 0.75rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .brand {
+      gap: 0.55rem;
+    }
+
     .brand-name {
       font-size: 0.92rem;
     }
 
+    .brand-designation {
+      font-size: 0.52rem;
+      letter-spacing: 0.06em;
+    }
+
     .brand-ltd {
       display: none;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .brand :global(.logo-mark) {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand-designation {
+      font-size: 0.48rem;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  /* Smallest phones: let the designation wrap onto two short lines. */
+  @media (max-width: 350px) {
+    .header-bar {
+      gap: 0.75rem;
+    }
+
+    .brand-designation {
+      max-width: 12.5em;
+      font-size: 0.52rem;
+      line-height: 1.3;
+      white-space: normal;
     }
   }
 

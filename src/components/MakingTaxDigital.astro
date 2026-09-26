@@ -1,0 +1,517 @@
+---
+/**
+ * Making Tax Digital panel (inside the services section): what we do for the
+ * self-employed and VAT-registered businesses, plus an animated rollout
+ * timeline. Milestone status is worked out at build time and refreshed in the
+ * browser, so "In force" / "Upcoming" stays correct without a rebuild.
+ */
+import Icon from './Icon.astro';
+import { mtd } from '../data/site';
+
+const now = Date.now();
+const times = mtd.timeline.map((step) => Date.parse(step.date));
+
+const steps = mtd.timeline.map((step, index) => {
+  const start = times[index]!;
+  const next = times[index + 1];
+  const live = start <= now;
+  const fill = next === undefined ? 0 : now >= next ? 1 : now <= start ? 0 : (now - start) / (next - start);
+  const current = live && next !== undefined && now < next;
+  return { ...step, live, fill, current };
+});
+---
+
+<div class="mtd" data-reveal>
+  <div class="mtd-glow" aria-hidden="true"></div>
+
+  <div class="mtd-head">
+    <div>
+      <p class="label mtd-label">
+        <span class="label-index"><Icon name="laptop" size={14} strokeWidth={2} /></span>
+        {mtd.label}
+      </p>
+      <h3 class="mtd-title">
+        {mtd.heading.before} <span class="accent">{mtd.heading.accent}</span>
+      </h3>
+    </div>
+    <div class="mtd-intro">
+      <p>{mtd.intro}</p>
+      <a class="btn btn-primary" href="#contact" data-enquire={mtd.topic}>
+        Check if MTD applies to you
+        <Icon name="arrow-right" class="btn-arrow" />
+      </a>
+    </div>
+  </div>
+
+  <div class="mtd-groups">
+    {
+      mtd.groups.map((group) => (
+        <div class="mtd-group">
+          <div class="mtd-group-head">
+            <span class="mtd-group-icon">
+              <Icon name={group.icon} size={22} />
+            </span>
+            <div>
+              <h4>{group.title}</h4>
+              <p class="mtd-scheme">{group.scheme}</p>
+            </div>
+          </div>
+          <ul class="mtd-points" role="list">
+            {group.points.map((point, index) => (
+              <li style={`--i: ${index}`}>
+                <span class="mtd-tick" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1" />
+                  </svg>
+                </span>
+                {point}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="mtd-timeline" data-mtd-timeline>
+    <p class="mtd-timeline-title" id="mtd-timeline-title">When Making Tax Digital applies</p>
+    <ol class="mtd-steps" role="list" aria-labelledby="mtd-timeline-title">
+      {
+        steps.map((step, index) => (
+          <li
+            class:list={['mtd-step', { 'is-live': step.live, 'is-current': step.current }]}
+            data-date={step.date}
+            style={`--i: ${index}; --fill-to: ${step.fill.toFixed(3)}`}
+          >
+            <span class="mtd-dot" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 12.5l4 4L18 8.5" />
+              </svg>
+            </span>
+            <span class="mtd-today" aria-hidden="true">
+              <span>Today</span>
+            </span>
+            <span class="mtd-date">{step.label}</span>
+            <span class="mtd-step-scheme">{step.scheme}</span>
+            <span class="mtd-step-text">{step.text}</span>
+            <span class="mtd-status" data-status>
+              {step.live ? 'In force' : 'Upcoming'}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="mtd-note">{mtd.note}</p>
+  </div>
+</div>
+
+<style>
+  /* Registered so it can be transitioned; inherited so the connector
+     (::after) sees the animated value. */
+  @property --fill {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
+
+  .mtd {
+    position: relative;
+    isolation: isolate;
+    margin-top: 1rem;
+    padding: clamp(1.5rem, 1rem + 3vw, 3rem);
+    border-radius: var(--radius-xl);
+    background:
+      linear-gradient(160deg, rgb(3 169 244 / 0.13), rgb(255 255 255 / 0.025) 45%),
+      var(--ink-850);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09);
+    overflow: clip;
+  }
+
+  .mtd-glow {
+    position: absolute;
+    right: -12%;
+    bottom: -45%;
+    z-index: -1;
+    width: 60%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(63 217 160 / 0.14), transparent 65%);
+  }
+
+  /* Heading row ------------------------------------------------------------ */
+  .mtd-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 1.5rem 3rem;
+  }
+
+  .mtd-title {
+    margin-top: 1rem;
+    font-size: var(--step-4);
+    letter-spacing: -0.04em;
+  }
+
+  .mtd-title .accent {
+    color: var(--brand-300);
+  }
+
+  .mtd-intro p {
+    color: var(--slate-300);
+  }
+
+  .mtd-intro .btn {
+    margin-top: 1.4rem;
+  }
+
+  /* Service groups --------------------------------------------------------- */
+  .mtd-groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+
+  .mtd-group {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: rgb(255 255 255 / 0.04);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07);
+  }
+
+  .mtd-group-head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .mtd-group-icon {
+    display: grid;
+    place-items: center;
+    width: 2.9rem;
+    height: 2.9rem;
+    flex-shrink: 0;
+    border-radius: 0.9rem;
+    color: var(--brand-300);
+    background: rgb(3 169 244 / 0.14);
+    box-shadow: inset 0 0 0 1px rgb(54 186 246 / 0.25);
+  }
+
+  .mtd-group h4 {
+    font-size: var(--step-1);
+    letter-spacing: -0.02em;
+  }
+
+  .mtd-scheme,
+  .mtd-step-scheme,
+  .mtd-timeline-title {
+    font-family: var(--font-code);
+    font-size: var(--step--2);
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .mtd-scheme {
+    margin-top: 0.3rem;
+    color: var(--mint-300);
+  }
+
+  .mtd-points {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .mtd-points li {
+    display: flex;
+    gap: 0.75rem;
+    color: var(--slate-200);
+    font-size: 0.97rem;
+    line-height: 1.5;
+  }
+
+  .mtd-tick {
+    display: grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    border-radius: 50%;
+    color: var(--mint-300);
+    background: rgb(63 217 160 / 0.15);
+  }
+
+  .mtd-tick svg {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .mtd-tick path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.5s var(--ease-out);
+    transition-delay: calc(0.5s + var(--i) * 0.12s);
+  }
+
+  :global(.js) .mtd:not(.is-visible) .mtd-tick path {
+    stroke-dashoffset: 1;
+  }
+
+  /* Timeline --------------------------------------------------------------- */
+  .mtd-timeline {
+    margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+    padding-top: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .mtd-timeline-title {
+    margin-bottom: 2.25rem;
+    color: var(--slate-400);
+  }
+
+  .mtd-steps {
+    --dot: 1.6rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .mtd-step {
+    --fill: var(--fill-to);
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 0.3rem;
+    padding-inline: 0.5rem;
+    text-align: center;
+    transition:
+      --fill 0.8s var(--ease-in-out),
+      opacity 0.6s var(--ease-out),
+      translate 0.6s var(--ease-out);
+    transition-delay: calc(0.5s + var(--i) * 0.45s), calc(0.2s + var(--i) * 0.12s), calc(0.2s + var(--i) * 0.12s);
+  }
+
+  :global(.js) .mtd:not(.is-visible) .mtd-step {
+    --fill: 0;
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+
+  /* connector to the next milestone, filled up to "today" */
+  .mtd-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--dot) / 2 - 1px);
+    left: calc(50% + var(--dot) / 2 + 0.4rem);
+    width: calc(100% - var(--dot) - 0.8rem);
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--mint-400) calc(var(--fill) * 100%),
+      rgb(255 255 255 / 0.14) calc(var(--fill) * 100%)
+    );
+  }
+
+  .mtd-dot {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--dot);
+    height: var(--dot);
+    margin-bottom: 0.7rem;
+    border-radius: 50%;
+    background: var(--ink-850);
+    box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.22);
+    transition:
+      background-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+
+  .mtd-dot svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    opacity: 0;
+  }
+
+  .mtd-dot path {
+    fill: none;
+    stroke: var(--ink-950);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .mtd-step.is-live .mtd-dot {
+    background: var(--mint-400);
+    box-shadow: 0 0 0 5px rgb(63 217 160 / 0.14);
+  }
+
+  .mtd-step.is-live .mtd-dot svg {
+    opacity: 1;
+  }
+
+  .mtd-today {
+    position: absolute;
+    z-index: 2;
+    top: calc(var(--dot) / 2);
+    left: calc(50% + var(--dot) / 2 + 0.4rem + (100% - var(--dot) - 0.8rem) * var(--fill-to));
+    display: none;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--mint-300);
+    box-shadow: 0 0 0 5px rgb(63 217 160 / 0.22);
+    translate: -50% -50%;
+    transition: opacity 0.5s ease calc(1s + var(--i) * 0.45s);
+  }
+
+  .mtd-step.is-current .mtd-today {
+    display: block;
+  }
+
+  :global(.js) .mtd:not(.is-visible) .mtd-today {
+    opacity: 0;
+  }
+
+  .mtd-today span {
+    position: absolute;
+    bottom: calc(100% + 0.55rem);
+    left: 50%;
+    translate: -50% 0;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    color: var(--ink-950);
+    background: var(--mint-300);
+    font-family: var(--font-code);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .mtd-date {
+    color: var(--white);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .mtd-step-scheme {
+    color: var(--brand-300);
+  }
+
+  .mtd-step-text {
+    color: var(--slate-300);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .mtd-status {
+    margin-top: 0.45rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    color: var(--slate-300);
+    background: rgb(255 255 255 / 0.08);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .mtd-step.is-live .mtd-status {
+    color: var(--mint-300);
+    background: rgb(63 217 160 / 0.14);
+  }
+
+  .mtd-note {
+    margin-top: 1.75rem;
+    color: var(--slate-400);
+    font-size: 0.85rem;
+  }
+
+  /* Tablet and mobile: stack everything, timeline runs down the page. ----- */
+  @media (max-width: 860px) {
+    .mtd-head,
+    .mtd-groups {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .mtd-steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .mtd-step {
+      grid-template-columns: var(--dot) minmax(0, 1fr);
+      justify-items: start;
+      column-gap: 1rem;
+      row-gap: 0.25rem;
+      padding: 0 0 1.75rem;
+      text-align: left;
+    }
+
+    .mtd-step > :not(.mtd-dot, .mtd-today) {
+      grid-column: 2;
+    }
+
+    .mtd-dot {
+      grid-row: 1 / span 4;
+      margin-bottom: 0;
+    }
+
+    .mtd-step:not(:last-child)::after {
+      top: calc(var(--dot) + 0.35rem);
+      left: calc(var(--dot) / 2 - 1px);
+      width: 2px;
+      height: calc(100% - var(--dot) - 0.7rem);
+      background: linear-gradient(
+        180deg,
+        var(--mint-400) calc(var(--fill) * 100%),
+        rgb(255 255 255 / 0.14) calc(var(--fill) * 100%)
+      );
+    }
+
+    .mtd-today {
+      top: calc(var(--dot) + 0.35rem + (100% - var(--dot) - 0.7rem) * var(--fill-to));
+      left: calc(var(--dot) / 2);
+    }
+
+    /* The text column sits right beside the line, so show just the marker. */
+    .mtd-today span {
+      display: none;
+    }
+
+    .mtd-status {
+      margin-top: 0.3rem;
+    }
+  }
+</style>
+
+<script>
+  // Refresh milestone status against today's date (the build may be older).
+  const timeline = document.querySelector<HTMLElement>('[data-mtd-timeline]');
+  if (timeline) {
+    const steps = Array.from(timeline.querySelectorAll<HTMLElement>('[data-date]'));
+    const times = steps.map((step) => Date.parse(step.dataset.date ?? ''));
+    const now = Date.now();
+    steps.forEach((step, index) => {
+      const start = times[index]!;
+      const next = times[index + 1];
+      const live = start <= now;
+      const fill = next === undefined ? 0 : now >= next ? 1 : now <= start ? 0 : (now - start) / (next - start);
+      step.classList.toggle('is-live', live);
+      step.classList.toggle('is-current', live && next !== undefined && now < next);
+      step.style.setProperty('--fill-to', fill.toFixed(3));
+      const status = step.querySelector('[data-status]');
+      if (status) status.textContent = live ? 'In force' : 'Upcoming';
+    });
+  }
+</script>

@@ -7,7 +7,8 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import * as opentypeModule from 'opentype.js';
 import sharp from 'sharp';
-import { brandColors as c, logoMark, logoMarkSvg } from '../data/brand';
+import { brandColors as c, logoGlyph, logoGradient, logoMarkSvg } from '../data/brand';
+import { company } from '../data/site';
 
 // opentype.js ships an ESM build (named exports) and a UMD build (default
 // export); depending on how it is resolved we may get either shape.
@@ -137,6 +138,60 @@ export function createIco(images: Array<{ size: number; data: Uint8Array }>): Ui
   return bytes;
 }
 
+type LogoTheme = 'dark' | 'light';
+
+/**
+ * The horizontal logo lockup — mark, “Direct Tax Solutions” and the ACCA
+ * designation sized to the same width — as SVG elements with text as paths.
+ * `height` is the height of the mark; everything else scales with it.
+ */
+export async function logoLockup(theme: LogoTheme, x: number, y: number, height: number, id = 'lockup') {
+  const k = height / 64;
+  const ink = theme === 'dark' ? '#ffffff' : c.ink900;
+  const accent = theme === 'dark' ? c.brand400 : c.brand600;
+  const muted = theme === 'dark' ? c.slate300 : c.slate600;
+  const textX = x + height + 18 * k;
+  const nameSize = 30 * k;
+
+  const name = await line(
+    [
+      { text: 'Direct ', font: 'sans', size: nameSize, fill: ink, tracking: -0.02 },
+      { text: 'Tax', font: 'sans', size: nameSize, fill: accent, tracking: -0.02 },
+      { text: ' Solutions', font: 'sans', size: nameSize, fill: ink, tracking: -0.02 },
+    ],
+    textX,
+    y + 30 * k,
+  );
+
+  // The designation line is sized so it spans exactly the name's width.
+  const label = company.designation.toUpperCase();
+  const probe = await measure([{ text: label, font: 'mono', size: 10, fill: muted, tracking: 0.12 }]);
+  const labelSize = (10 * name.width) / probe;
+  const designation = await line([{ text: label, font: 'mono', size: labelSize, fill: muted, tracking: 0.12 }], textX + k, y + 52 * k);
+
+  const svg = `<defs>${logoGradient(id)}</defs>
+  <g transform="translate(${x} ${y}) scale(${k})">
+    <rect width="64" height="64" rx="16" fill="url(#${id})"/>
+    ${logoGlyph()}
+  </g>
+  ${name.svg}${designation.svg}`;
+  return { svg, width: textX - x + name.width, height };
+}
+
+/** A standalone logo file for the brand kit (transparent background). */
+export async function brandLogoSvg(variant: 'logo-light' | 'logo-dark' | 'logo-mark'): Promise<{ svg: string; width: number; height: number }> {
+  if (variant === 'logo-mark') return { svg: logoMarkSvg(512), width: 512, height: 512 };
+  const pad = 8;
+  const lockup = await logoLockup(variant === 'logo-dark' ? 'dark' : 'light', pad, pad, 64);
+  const width = Math.ceil(lockup.width + pad * 2);
+  const height = 64 + pad * 2;
+  return {
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${lockup.svg}</svg>`,
+    width,
+    height,
+  };
+}
+
 /** 1200×630 social share image. */
 export async function ogImageSvg(): Promise<string> {
   const W = 1200;
@@ -177,20 +232,10 @@ export async function ogImageSvg(): Promise<string> {
       C${rightBox.x - rightBox.width * 0.04} ${cy - serif * 0.42} ${rightBox.x + rightBox.width * 0.3} ${cy - serif * 0.66} ${rightBox.x + rightBox.width * 0.62} ${cy - serif * 0.66}"
       fill="none" stroke="${c.mint400}" stroke-width="3.5" stroke-linecap="round"/>`;
 
-  const wordmark = await line(
-    [
-      { text: 'Direct ', font: 'sans', size: 30, fill: '#fff', tracking: -0.02 },
-      { text: 'Tax', font: 'sans', size: 30, fill: c.brand400, tracking: -0.02 },
-      { text: ' Solutions', font: 'sans', size: 30, fill: '#fff', tracking: -0.02 },
-    ],
-    left + 76,
-    104,
-  );
-  const ltdX = left + 76 + wordmark.width + 14;
-  const ltd = await line([{ text: 'LTD', font: 'mono', size: 13, fill: '#b3c0cf', tracking: 0.12 }], ltdX + 10, 99);
+  const lockup = await logoLockup('dark', left, 58, 60, 'og-mark');
 
   const tagline = await line(
-    [{ text: 'CHARTERED ACCOUNTANTS · TAX ADVISORS · BUSINESS MENTORS', font: 'mono', size: 17, fill: '#b3c0cf', tracking: 0.08 }],
+    [{ text: 'TAX ADVISORS · BUSINESS MENTORS · LONDON', font: 'mono', size: 17, fill: '#b3c0cf', tracking: 0.08 }],
     left,
     566,
   );
@@ -246,10 +291,6 @@ export async function ogImageSvg(): Promise<string> {
       <stop offset="0" stop-color="${c.brand400}" stop-opacity="0.95"/>
       <stop offset="1" stop-color="#036ca1" stop-opacity="0.35"/>
     </linearGradient>
-    <linearGradient id="mark" x1="6" y1="2" x2="58" y2="62" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="${logoMark.gradient[0]}"/>
-      <stop offset="1" stop-color="${logoMark.gradient[1]}"/>
-    </linearGradient>
     <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
       <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity="0.5"/>
     </filter>
@@ -260,15 +301,7 @@ export async function ogImageSvg(): Promise<string> {
   <rect width="${W}" height="${H}" fill="url(#glowBlue)"/>
   <rect width="${W}" height="${H}" fill="url(#glowMint)"/>
 
-  <g transform="translate(${left} 62)">
-    <rect width="60" height="60" rx="${(logoMark.radius * 60) / 64}" fill="url(#mark)"/>
-    <g transform="scale(${60 / 64})" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="${logoMark.tick}"/><path d="${logoMark.head}"/>
-    </g>
-  </g>
-  ${wordmark.svg}
-  <rect x="${ltdX}" y="81" width="${ltd.width + 20}" height="26" rx="6" fill="none" stroke="#fff" stroke-opacity="0.25"/>
-  ${ltd.svg}
+  ${lockup.svg}
 
   ${headline.map((item) => item.svg).join('')}
   ${circle}

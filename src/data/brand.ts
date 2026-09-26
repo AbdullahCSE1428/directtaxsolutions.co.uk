@@ -1,13 +1,20 @@
 /**
- * Brand mark geometry, shared by the inline <Logo /> component and the
- * build-time image endpoints (favicons, app icons, social share image).
+ * Brand identity: the logo mark's geometry and colours, shared by the inline
+ * <Logo /> component and the build-time images (favicons, app icons, social
+ * image and the downloadable logo files under /brand/).
+ *
+ * The mark is a “D” monogram (for Direct) with a rising arrow in its counter,
+ * set on a deep blue tile.
  */
 export const logoMark = {
-  radius: 17,
-  gradient: ['#36baf6', '#0467a6'],
-  /** Audit tick whose long stroke rises into an arrow. */
-  tick: 'M16.5 34.5 26 44 47 21.5',
-  head: 'M35.5 21H47V32.5',
+  radius: 16,
+  gradient: ['#1d9fe3', '#053e70'],
+  /** The D letterform, drawn as a stroke. */
+  letter: 'M20 16.5v31h10a15.5 15.5 0 0 0 0-31z',
+  letterWidth: 6.5,
+  /** The growth arrow inside the D's counter (shaft, then head). */
+  arrow: ['M26 38.5 35.5 29', 'M29.5 28.5h6.5v6.5'],
+  arrowWidth: 4.2,
 } as const;
 
 export const brandColors = {
@@ -16,23 +23,33 @@ export const brandColors = {
   brand300: '#6fcdf8',
   brand400: '#36baf6',
   brand500: '#03a9f4',
+  brand600: '#0289cb',
   mint400: '#3fd9a0',
+  slate300: '#b3c0cf',
+  slate600: '#46566b',
 } as const;
 
-/** Standalone SVG markup of the mark, e.g. for rasterising with sharp. */
+/** The white D + arrow glyph (no tile), as SVG elements in the 64×64 box. */
+export function logoGlyph(color = '#fff'): string {
+  return `<path d="${logoMark.letter}" fill="none" stroke="${color}" stroke-width="${logoMark.letterWidth}" stroke-linejoin="round"/>
+  <g fill="none" stroke="${color}" stroke-width="${logoMark.arrowWidth}" stroke-linecap="round" stroke-linejoin="round">${logoMark.arrow
+    .map((d) => `<path d="${d}"/>`)
+    .join('')}</g>`;
+}
+
+/** Gradient definition for the tile, in the mark's 64×64 coordinate space. */
+export function logoGradient(id: string): string {
+  return `<linearGradient id="${id}" x1="6" y1="2" x2="58" y2="62" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="${logoMark.gradient[0]}"/>
+    <stop offset="1" stop-color="${logoMark.gradient[1]}"/>
+  </linearGradient>`;
+}
+
+/** Standalone SVG of the mark (tile + glyph), e.g. for favicons and app icons. */
 export function logoMarkSvg(size = 64, { rounded = true } = {}): string {
-  const radius = rounded ? logoMark.radius : 0;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="6" y1="2" x2="58" y2="62" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="${logoMark.gradient[0]}"/>
-      <stop offset="1" stop-color="${logoMark.gradient[1]}"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="${radius}" fill="url(#g)"/>
-  <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="${logoMark.tick}"/>
-    <path d="${logoMark.head}"/>
-  </g>
+  <defs>${logoGradient('g')}</defs>
+  <rect width="64" height="64" rx="${rounded ? logoMark.radius : 0}" fill="url(#g)"/>
+  ${logoGlyph()}
 </svg>`;
 }

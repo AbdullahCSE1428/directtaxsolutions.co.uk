@@ -9,6 +9,8 @@ export const company = {
   shortName: 'Direct Tax Solutions',
   number: '13431046',
   jurisdiction: 'England & Wales',
+  /** Professional designation shown beside the company name. */
+  designation: 'Chartered Certified Accountants (ACCA)',
   director: 'Nisar Aziz',
   email: 'info@directtaxsolutions.co.uk',
   phone: {
@@ -38,9 +40,9 @@ export const formEndpoint = `https://formsubmit.co/${company.email}`;
 export const formAjaxEndpoint = `https://formsubmit.co/ajax/${company.email}`;
 
 export const seo = {
-  title: 'Direct Tax Solutions Ltd | Chartered Accountants & Tax Advisors in London',
+  title: 'Direct Tax Solutions Ltd | Chartered Certified Accountants (ACCA) & Tax Advisors in London',
   description:
-    'London chartered accountants, tax advisors and business mentors. Accounting, VAT, payroll, company formation and tax services for small and medium sized businesses.',
+    'London Chartered Certified Accountants (ACCA), tax advisors and business mentors. Accounting, VAT, Making Tax Digital, payroll, company formation and tax services for small and medium sized businesses.',
 } as const;
 
 export const nav = [
@@ -57,19 +59,19 @@ export const hero = {
     { text: 'Committed to helping you reach the' },
     { text: 'right accounting solution', accent: true },
   ],
-  lead: 'Providing expert chartered accountancy guidance and support to small and medium sized businesses.',
+  lead: 'Providing expert chartered certified accountancy guidance and support to small and medium sized businesses.',
   audiences: ['New business start-ups', 'Established organisations', 'Rapidly growing concerns'],
 } as const;
 
 export const about = {
   heading: {
-    before: 'An emerging chartered accountancy firm with',
+    before: 'An emerging chartered certified accountancy firm with',
     highlight: 'several years of experience',
   },
   /** Revealed word by word on scroll; `key` segments are emphasised. */
   statement: [
     { text: 'Direct Tax Solutions Ltd is a firm of' },
-    { text: 'chartered accountants, tax advisors and business mentors.', key: true },
+    { text: `${company.designation}, tax advisors and business mentors.`, key: true },
     { text: 'We have been supporting the growth of businesses just like yours.' },
   ],
   intro:
@@ -174,6 +176,49 @@ export const services: ReadonlyArray<{
     text: 'Assist clients in their business tax compliance. Compute the business tax liabilities and file the business tax returns online. Assist and advise client businesses on various tax issues, including tax investigations, enquiries and interventions. Represent the business in all matters of taxation, including representation at tribunals.',
   },
 ];
+
+/**
+ * Making Tax Digital panel in the services section.
+ * Keep the rollout dates in line with HMRC's published timetable.
+ */
+export const mtd = {
+  label: 'Making Tax Digital',
+  heading: { before: 'Ready for', accent: 'Making Tax Digital' },
+  intro:
+    'HMRC’s Making Tax Digital (MTD) rules require businesses to keep digital records and send their updates and returns to HMRC through compatible software. We get you set up, keep your records in order and handle the submissions for you — whether you are self-employed or VAT-registered.',
+  topic: 'Making Tax Digital',
+  groups: [
+    {
+      icon: 'user',
+      title: 'Self-employed',
+      scheme: 'MTD for Income Tax',
+      points: [
+        'Check whether and when MTD for Income Tax applies to you',
+        'Choose and set up HMRC-recognised software',
+        'Keep digital records of your income and expenses',
+        'Send your quarterly updates and file your tax return on time',
+      ],
+    },
+    {
+      icon: 'receipt',
+      title: 'VAT-registered businesses',
+      scheme: 'MTD for VAT',
+      points: [
+        'Sign up for MTD for VAT and connect compatible software',
+        'Keep digital VAT records, including bridging from spreadsheets',
+        'Prepare, check and file your VAT returns online',
+        'Keep on top of deadlines to avoid late-submission penalties',
+      ],
+    },
+  ],
+  timeline: [
+    { date: '2022-04-01', label: 'April 2022', scheme: 'VAT', text: 'All VAT-registered businesses' },
+    { date: '2026-04-06', label: 'April 2026', scheme: 'Income Tax', text: 'Qualifying income over £50,000' },
+    { date: '2027-04-06', label: 'April 2027', scheme: 'Income Tax', text: 'Qualifying income over £30,000' },
+    { date: '2028-04-06', label: 'April 2028', scheme: 'Income Tax', text: 'Qualifying income over £20,000' },
+  ],
+  note: 'Qualifying income is your total income from self-employment and property, before expenses.',
+} as const;
 
 export const contact = {
   heading: { before: 'Get in touch with our', accent: 'office' },

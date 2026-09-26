@@ -1,9 +1,9 @@
 ---
 /**
- * The brand mark: a capital “DT” ligature (Direct Tax) in a blue-to-mint
- * gradient on a rounded navy tile. Geometry lives in src/data/brand.ts.
+ * The brand mark: a capital “DT” ligature (Direct Tax) in white on a rounded
+ * blue gradient tile. Geometry lives in src/data/brand.ts.
  */
-import { logoGradient, logoTile } from '../data/brand';
+import { logoTile } from '../data/brand';
 
 interface Props {
   size?: number;
@@ -23,5 +23,5 @@ const gradientId = `${idPrefix}-gradient`;
   viewBox="0 0 64 64"
   aria-hidden="true"
   focusable="false"
-  set:html={`<defs>${logoGradient(gradientId)}</defs>${logoTile(gradientId, { ring: true })}`}
+  set:html={logoTile(gradientId)}
 />

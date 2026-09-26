@@ -16,8 +16,8 @@ export const logoMark = {
   strokeWidth: 8,
   /** Strokes in drawing order: the D's stem and bowl, the shared top bar, the T's stem. */
   strokes: ['M8 14V50h9a15 18 0 0 0 0-36', 'M8 14h48', 'M45.5 14v36'],
-  /** The rounded navy tile the mark sits on. */
-  tile: '#07182b',
+  /** The rounded tile the mark sits on in white: a blue gradient from top-left to bottom-right. */
+  tileGradient: ['#1d9fe3', '#053e70'],
   tileRadius: 15,
 } as const;
 
@@ -40,30 +40,27 @@ export function logoGradient(id: string): string {
     .join('')}</linearGradient>`;
 }
 
-/** The “DT” glyph as SVG elements in the 64×64 box, stroked with gradient `id`. */
-export function logoGlyph(id: string): string {
-  return `<g fill="none" stroke="url(#${id})" stroke-width="${logoMark.strokeWidth}" stroke-linecap="round" stroke-linejoin="round">
+/** The “DT” glyph as SVG elements in the 64×64 box, stroked with `paint` (a colour or `url(#id)`). */
+export function logoGlyph(paint: string): string {
+  return `<g fill="none" stroke="${paint}" stroke-width="${logoMark.strokeWidth}" stroke-linecap="round" stroke-linejoin="round">
     ${logoMark.strokes.map((d) => `<path d="${d}"/>`).join('')}
   </g>`;
 }
 
 /**
- * The mark on its rounded navy tile, as SVG elements in the 64×64 box. `ring`
- * adds a hairline edge so the tile stays visible on dark backgrounds;
- * `rounded: false` makes the tile full-bleed for platforms that apply their own mask.
+ * The mark in white on its rounded blue tile, as SVG elements in the 64×64 box;
+ * `id` names the tile's gradient. `rounded: false` makes the tile full-bleed for
+ * platforms that apply their own mask.
  */
-export function logoTile(id: string, { rounded = true, ring = false } = {}): string {
-  const radius = rounded ? logoMark.tileRadius : 0;
-  const edge = ring
-    ? `<rect x="0.5" y="0.5" width="63" height="63" rx="${Math.max(0, radius - 0.5)}" fill="none" stroke="#ffffff" stroke-opacity="0.16"/>`
-    : '';
-  return `<rect width="64" height="64" rx="${radius}" fill="${logoMark.tile}"/>${edge}<g transform="translate(9 9) scale(0.72)">${logoGlyph(id)}</g>`;
+export function logoTile(id: string, { rounded = true } = {}): string {
+  const [from, to] = logoMark.tileGradient;
+  return `<defs><linearGradient id="${id}" x1="6" y1="2" x2="58" y2="62" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/></linearGradient></defs>
+  <rect width="64" height="64" rx="${rounded ? logoMark.tileRadius : 0}" fill="url(#${id})"/>
+  <g transform="translate(9 9) scale(0.72)">${logoGlyph('#ffffff')}</g>`;
 }
 
-/** Standalone SVG of the mark, on its tile (favicons, app icons) or without it. */
+/** Standalone SVG of the mark, on its tile (favicons, app icons) or without it in the blue-to-mint gradient. */
 export function logoMarkSvg(size = 64, { tile = true, rounded = true } = {}): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64">
-  <defs>${logoGradient('g')}</defs>
-  ${tile ? logoTile('g', { rounded }) : logoGlyph('g')}
-</svg>`;
+  const body = tile ? logoTile('g', { rounded }) : `<defs>${logoGradient('g')}</defs>${logoGlyph('url(#g)')}`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64">${body}</svg>`;
 }

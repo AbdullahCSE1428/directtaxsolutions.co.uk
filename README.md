@@ -40,8 +40,8 @@ Other things you might touch:
 
 - **Colours, type scale, spacing** — design tokens at the top of `src/styles/global.css`.
 - **Logo** — a capital “DT” ligature (Direct Tax), where the top of the D runs on into the T's
-  crossbar, in a blue-to-mint gradient on a rounded navy tile, beside the “Direct Tax Solutions Ltd”
-  wordmark (“Tax” in blue).
+  crossbar, in white on a rounded blue gradient tile, beside the “Direct Tax Solutions Ltd” wordmark
+  (“Tax” in blue).
   Geometry and colours live in `src/data/brand.ts`; it is used by the header, footer, favicons, app
   icons and social image.
 - **Making Tax Digital panel** — the `mtd` export in `src/data/site.ts`, including the rollout dates.
@@ -56,7 +56,7 @@ Every build also publishes ready-to-use logo files, generated from the same sour
 | `/brand/logo-light.svg` · `/brand/logo-light.png` | light backgrounds (letterheads, documents) |
 | `/brand/logo-dark.svg` · `/brand/logo-dark.png` | dark backgrounds |
 | `/brand/logo-mark.svg` · `/brand/logo-mark.png` | square spaces (social profile pictures, app icons) |
-| `/brand/logo-symbol.svg` · `/brand/logo-symbol.png` | the mark without its tile, on a transparent background |
+| `/brand/logo-symbol.svg` · `/brand/logo-symbol.png` | the mark without its tile, in the blue-to-mint gradient, on a transparent background |
 
 For example: https://directtaxsolutions.co.uk/brand/logo-light.png
 

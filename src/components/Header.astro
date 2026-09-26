@@ -11,9 +11,7 @@ import { company, links, nav } from '../data/site';
     <a class="brand" href="/#home" aria-label={`${company.name}, ${company.designation} — home`}>
       <Logo idPrefix="header-logo" size={36} />
       <span class="brand-text" aria-hidden="true">
-        <span class="brand-name">
-          Direct <span class="brand-tax">Tax</span> Solutions <span class="brand-ltd">Ltd</span>
-        </span>
+        <span class="brand-name"><span class="brand-strong">Direct Tax</span> Solutions</span>
         <span class="brand-designation">{company.designation}</span>
       </span>
     </a>
@@ -59,7 +57,7 @@ import { company, links, nav } from '../data/site';
       <span class="brand" aria-hidden="true">
         <Logo idPrefix="menu-logo" size={34} />
         <span class="brand-text">
-          <span class="brand-name">Direct <span class="brand-tax">Tax</span> Solutions</span>
+          <span class="brand-name"><span class="brand-strong">Direct Tax</span> Solutions</span>
           <span class="brand-designation">{company.designation}</span>
         </span>
       </span>
@@ -183,12 +181,18 @@ import { company, links, nav } from '../data/site';
     gap: 0.28rem;
   }
 
+  /* Wordmark: heavy “Direct Tax”, light “Solutions” — as in the logo. */
   .brand-name {
-    font-size: 1.02rem;
-    font-weight: 700;
+    font-size: 1.08rem;
+    font-weight: 300;
     letter-spacing: -0.02em;
     line-height: 1.1;
     white-space: nowrap;
+  }
+
+  .brand-strong {
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 
   .brand-designation {
@@ -199,25 +203,6 @@ import { company, links, nav } from '../data/site';
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
-    color: var(--slate-300);
-  }
-
-  .brand-tax {
-    color: var(--brand-400);
-  }
-
-  .brand-ltd {
-    display: inline-block;
-    margin-left: 0.2rem;
-    padding: 0.18rem 0.4rem 0.14rem;
-    border: 1px solid rgb(255 255 255 / 0.22);
-    border-radius: 6px;
-    font-family: var(--font-code);
-    font-size: 0.6rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    vertical-align: 0.2em;
     color: var(--slate-300);
   }
 
@@ -336,9 +321,6 @@ import { company, links, nav } from '../data/site';
       letter-spacing: 0.06em;
     }
 
-    .brand-ltd {
-      display: none;
-    }
   }
 
   @media (max-width: 380px) {

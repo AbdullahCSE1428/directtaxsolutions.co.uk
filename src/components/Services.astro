@@ -2,7 +2,7 @@
 import Icon from './Icon.astro';
 import MakingTaxDigital from './MakingTaxDigital.astro';
 import ServiceIcon from './ServiceIcon.astro';
-import { company, services } from '../data/site';
+import { company, sectionNumber, services } from '../data/site';
 ---
 
 <section id="services" class="services section theme-dark" aria-labelledby="services-title">
@@ -11,7 +11,7 @@ import { company, services } from '../data/site';
   <div class="container">
     <header class="services-head">
       <div>
-        <p class="label" data-reveal><span class="label-index">02</span> Services</p>
+        <p class="label" data-reveal><span class="label-index">{sectionNumber('services')}</span> Services</p>
         <h2 id="services-title" class="services-title" data-reveal style="--stagger: 1">
           Our <span class="accent">services</span>
         </h2>

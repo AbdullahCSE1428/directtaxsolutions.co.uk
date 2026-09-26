@@ -13,7 +13,7 @@ const year = new Date().getFullYear();
       <div class="footer-brand">
         <a class="footer-logo" href="/#home" aria-label={`${company.name} — home`}>
           <Logo idPrefix="footer-logo" size={44} />
-          <span aria-hidden="true">Direct <span class="brand-tax">Tax</span> Solutions</span>
+          <span class="footer-wordmark-text" aria-hidden="true"><strong>Direct Tax</strong> Solutions</span>
         </a>
         <p class="footer-tagline">A firm of {company.designation}, tax advisors and business mentors.</p>
         <a class="btn btn-primary" href="/#contact">
@@ -126,8 +126,13 @@ const year = new Date().getFullYear();
     text-decoration: none;
   }
 
-  .brand-tax {
-    color: var(--brand-400);
+  .footer-wordmark-text {
+    font-weight: 300;
+  }
+
+  .footer-wordmark-text strong {
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 
   .footer-tagline {

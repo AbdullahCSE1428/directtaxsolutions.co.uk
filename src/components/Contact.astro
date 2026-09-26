@@ -2,7 +2,7 @@
 import { Picture } from 'astro:assets';
 import Icon, { type IconName } from './Icon.astro';
 import calculator from '../assets/images/calculator.jpg';
-import { company, contact, formAjaxEndpoint, formEndpoint, links } from '../data/site';
+import { company, contact, formAjaxEndpoint, formEndpoint, links, sectionNumber } from '../data/site';
 
 const thankYouUrl = new URL('/thank-you/', Astro.site).href;
 const addressLine = `${company.address.street}, ${company.address.locality}, ${company.address.postcode}`;
@@ -22,7 +22,7 @@ const initials = company.director
 <section id="contact" class="contact section" aria-labelledby="contact-title">
   <div class="container">
     <header class="contact-head">
-      <p class="label" data-reveal><span class="label-index">03</span> Contact</p>
+      <p class="label" data-reveal><span class="label-index">{sectionNumber('contact')}</span> Contact</p>
       <h2 id="contact-title" class="contact-title" data-reveal style="--stagger: 1">
         {contact.heading.before} <span class="accent">{contact.heading.accent}</span>
       </h2>

@@ -2,7 +2,7 @@
   "name": "directtaxsolutions.co.uk",
   "version": "2.0.0",
   "private": true,
-  "description": "Website for Direct Tax Solutions Ltd — chartered accountants, tax advisors and business mentors in London.",
+  "description": "Website for Direct Tax Solutions Ltd — Chartered Certified Accountants (ACCA), tax advisors and business mentors in London.",
   "type": "module",
   "engines": {
     "node": ">=22.12.0"

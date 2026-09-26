@@ -1,6 +1,6 @@
 # Direct Tax Solutions Ltd — website
 
-The website for [Direct Tax Solutions Ltd](https://directtaxsolutions.co.uk), a London firm of chartered accountants,
+The website for [Direct Tax Solutions Ltd](https://directtaxsolutions.co.uk), a London firm of Chartered Certified Accountants (ACCA),
 tax advisors and business mentors (registered in England & Wales, company number 13431046).
 
 It is a static site built with [Astro](https://astro.build): pages are rendered to plain HTML at build time,

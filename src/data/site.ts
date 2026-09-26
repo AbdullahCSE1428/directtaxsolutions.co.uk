@@ -9,6 +9,8 @@ export const company = {
   shortName: 'Direct Tax Solutions',
   number: '13431046',
   jurisdiction: 'England & Wales',
+  /** Professional designation shown beside the company name. */
+  designation: 'Chartered Certified Accountants (ACCA)',
   director: 'Nisar Aziz',
   email: 'info@directtaxsolutions.co.uk',
   phone: {
@@ -38,9 +40,9 @@ export const formEndpoint = `https://formsubmit.co/${company.email}`;
 export const formAjaxEndpoint = `https://formsubmit.co/ajax/${company.email}`;
 
 export const seo = {
-  title: 'Direct Tax Solutions Ltd | Chartered Accountants & Tax Advisors in London',
+  title: 'Direct Tax Solutions Ltd | Chartered Certified Accountants (ACCA) & Tax Advisors in London',
   description:
-    'London chartered accountants, tax advisors and business mentors. Accounting, VAT, payroll, company formation and tax services for small and medium sized businesses.',
+    'London Chartered Certified Accountants (ACCA), tax advisors and business mentors. Accounting, VAT, payroll, company formation and tax services for small and medium sized businesses.',
 } as const;
 
 export const nav = [
@@ -57,19 +59,19 @@ export const hero = {
     { text: 'Committed to helping you reach the' },
     { text: 'right accounting solution', accent: true },
   ],
-  lead: 'Providing expert chartered accountancy guidance and support to small and medium sized businesses.',
+  lead: 'Providing expert chartered certified accountancy guidance and support to small and medium sized businesses.',
   audiences: ['New business start-ups', 'Established organisations', 'Rapidly growing concerns'],
 } as const;
 
 export const about = {
   heading: {
-    before: 'An emerging chartered accountancy firm with',
+    before: 'An emerging chartered certified accountancy firm with',
     highlight: 'several years of experience',
   },
   /** Revealed word by word on scroll; `key` segments are emphasised. */
   statement: [
     { text: 'Direct Tax Solutions Ltd is a firm of' },
-    { text: 'chartered accountants, tax advisors and business mentors.', key: true },
+    { text: `${company.designation}, tax advisors and business mentors.`, key: true },
     { text: 'We have been supporting the growth of businesses just like yours.' },
   ],
   intro:

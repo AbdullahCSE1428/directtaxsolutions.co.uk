@@ -9,7 +9,7 @@ import { company, links, nav } from '../data/site';
 <header class="site-header" data-header>
   <div class="header-bar">
     <a class="brand" href="/#home" aria-label={`${company.name}, ${company.designation} — home`}>
-      <Logo idPrefix="header-logo" size={36} />
+      <Logo idPrefix="header-logo" size={40} />
       <span class="brand-text" aria-hidden="true">
         <span class="brand-name"><span class="brand-strong">Direct <span class="brand-tax">Tax</span></span> Solutions <span class="brand-ltd">Ltd</span></span>
         <span class="brand-designation">{company.designation}</span>
@@ -55,7 +55,7 @@ import { company, links, nav } from '../data/site';
   <div class="mobile-menu-inner">
     <div class="mobile-menu-top">
       <span class="brand" aria-hidden="true">
-        <Logo idPrefix="menu-logo" size={34} />
+        <Logo idPrefix="menu-logo" size={38} />
         <span class="brand-text">
           <span class="brand-name"><span class="brand-strong">Direct <span class="brand-tax">Tax</span></span> Solutions <span class="brand-ltd">Ltd</span></span>
           <span class="brand-designation">{company.designation}</span>
@@ -333,6 +333,11 @@ import { company, links, nav } from '../data/site';
       gap: 0.55rem;
     }
 
+    .brand :global(.logo-mark) {
+      width: 36px;
+      height: 36px;
+    }
+
     .brand-name {
       font-size: 0.92rem;
     }
@@ -353,8 +358,8 @@ import { company, links, nav } from '../data/site';
 
   @media (max-width: 380px) {
     .brand :global(.logo-mark) {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
     }
 
     .brand-designation {

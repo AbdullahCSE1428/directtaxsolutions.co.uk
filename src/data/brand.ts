@@ -16,7 +16,7 @@ export const logoMark = {
   strokeWidth: 8,
   /** Strokes in drawing order: the D's stem and bowl, the shared top bar, the T's stem. */
   strokes: ['M8 14V50h9a15 18 0 0 0 0-36', 'M8 14h48', 'M45.5 14v36'],
-  /** Background tile used where the mark needs a solid square (app icons, favicons). */
+  /** The rounded navy tile the mark sits on. */
   tile: '#07182b',
   tileRadius: 15,
 } as const;
@@ -48,15 +48,22 @@ export function logoGlyph(id: string): string {
 }
 
 /**
- * Standalone SVG of the mark. With `tile` it sits on the navy square (favicons,
- * app icons); `rounded: false` makes that square full-bleed for platforms that
- * apply their own mask.
+ * The mark on its rounded navy tile, as SVG elements in the 64×64 box. `ring`
+ * adds a hairline edge so the tile stays visible on dark backgrounds;
+ * `rounded: false` makes the tile full-bleed for platforms that apply their own mask.
  */
+export function logoTile(id: string, { rounded = true, ring = false } = {}): string {
+  const radius = rounded ? logoMark.tileRadius : 0;
+  const edge = ring
+    ? `<rect x="0.5" y="0.5" width="63" height="63" rx="${Math.max(0, radius - 0.5)}" fill="none" stroke="#ffffff" stroke-opacity="0.16"/>`
+    : '';
+  return `<rect width="64" height="64" rx="${radius}" fill="${logoMark.tile}"/>${edge}<g transform="translate(9 9) scale(0.72)">${logoGlyph(id)}</g>`;
+}
+
+/** Standalone SVG of the mark, on its tile (favicons, app icons) or without it. */
 export function logoMarkSvg(size = 64, { tile = true, rounded = true } = {}): string {
-  const glyph = tile ? `<g transform="translate(9 9) scale(0.72)">${logoGlyph('g')}</g>` : logoGlyph('g');
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64">
   <defs>${logoGradient('g')}</defs>
-  ${tile ? `<rect width="64" height="64" rx="${rounded ? logoMark.tileRadius : 0}" fill="${logoMark.tile}"/>` : ''}
-  ${glyph}
+  ${tile ? logoTile('g', { rounded }) : logoGlyph('g')}
 </svg>`;
 }

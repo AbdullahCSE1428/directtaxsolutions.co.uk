@@ -7,7 +7,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import * as opentypeModule from 'opentype.js';
 import sharp from 'sharp';
-import { brandColors as c, logoGlyph, logoGradient, logoMarkSvg } from '../data/brand';
+import { brandColors as c, logoGradient, logoMarkSvg, logoTile } from '../data/brand';
 import { company } from '../data/site';
 
 // opentype.js ships an ESM build (named exports) and a UMD build (default
@@ -173,7 +173,7 @@ export async function logoLockup(theme: LogoTheme, x: number, y: number, height:
   const designation = await line([{ text: label, font: 'mono', size: labelSize, fill: muted, tracking: 0.12 }], textX + k, y + 52 * k);
 
   const svg = `<defs>${logoGradient(id)}</defs>
-  <g transform="translate(${x} ${y}) scale(${k})">${logoGlyph(id)}</g>
+  <g transform="translate(${x} ${y}) scale(${k})">${logoTile(id, { ring: theme === 'dark' })}</g>
   ${name.svg}${designation.svg}`;
   return { svg, width: textX - x + name.width, height };
 }

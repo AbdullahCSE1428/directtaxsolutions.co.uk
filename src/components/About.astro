@@ -1,6 +1,7 @@
 ---
 import FeatureVisual from './FeatureVisual.astro';
 import Icon, { type IconName } from './Icon.astro';
+import { logoMark } from '../data/brand';
 import { about } from '../data/site';
 
 const statementWords = about.statement.flatMap((segment) =>
@@ -74,8 +75,8 @@ const audienceIcons: Record<(typeof about.audiences)[number]['icon'], IconName> 
     <div class="vision theme-dark" data-reveal>
       <div class="vision-bg" aria-hidden="true"></div>
       <svg class="vision-mark" viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M16.5 34.5 26 44 47 21.5" pathLength="1"></path>
-        <path d="M35.5 21H47V32.5" pathLength="1"></path>
+        <path d={logoMark.letter} pathLength="1"></path>
+        {logoMark.arrow.map((d) => <path d={d} pathLength="1" />)}
       </svg>
       <div class="vision-content">
         <h3 class="label vision-label">

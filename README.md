@@ -39,9 +39,22 @@ for search engines together. (The wording on the social share image is drawn in 
 Other things you might touch:
 
 - **Colours, type scale, spacing** — design tokens at the top of `src/styles/global.css`.
-- **Logo mark** — geometry and colours in `src/data/brand.ts` (used by the header, footer, favicons and
-  social image).
+- **Logo** — a “D” monogram with a rising arrow, defined in `src/data/brand.ts` (geometry and colours)
+  and used by the header, footer, favicons, app icons and social image.
+- **Making Tax Digital panel** — the `mtd` export in `src/data/site.ts`, including the rollout dates.
 - **Photos** — `src/assets/images/`; Astro converts them to responsive AVIF/WebP at build time.
+
+### Logo files
+
+Every build also publishes ready-to-use logo files, generated from the same source:
+
+| File | Use it on |
+| --- | --- |
+| `/brand/logo-light.svg` · `/brand/logo-light.png` | light backgrounds (letterheads, documents) |
+| `/brand/logo-dark.svg` · `/brand/logo-dark.png` | dark backgrounds |
+| `/brand/logo-mark.svg` · `/brand/logo-mark.png` | square spaces (social profile pictures, app icons) |
+
+For example: https://directtaxsolutions.co.uk/brand/logo-light.png
 
 ## How it is built
 

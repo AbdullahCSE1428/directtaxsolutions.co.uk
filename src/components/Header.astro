@@ -58,7 +58,10 @@ import { company, links, nav } from '../data/site';
     <div class="mobile-menu-top">
       <span class="brand" aria-hidden="true">
         <Logo idPrefix="menu-logo" size={34} />
-        <span class="brand-name">Direct <span class="brand-tax">Tax</span> Solutions</span>
+        <span class="brand-text">
+          <span class="brand-name">Direct <span class="brand-tax">Tax</span> Solutions</span>
+          <span class="brand-designation">{company.designation}</span>
+        </span>
       </span>
       <button class="menu-close" type="button" data-menu-close>
         <span class="sr-only">Close menu</span>

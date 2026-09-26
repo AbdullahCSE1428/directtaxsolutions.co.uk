@@ -1,7 +1,7 @@
 ---
 /**
- * The brand mark: an audit tick whose long stroke becomes a growth arrow —
- * “checked, filed and moving forward”.
+ * The brand mark: a “D” monogram (for Direct) with a rising arrow in its
+ * counter, on a deep blue tile. Geometry lives in src/data/brand.ts.
  */
 import { logoMark } from '../data/brand';
 
@@ -31,15 +31,14 @@ const gradientId = `${idPrefix}-gradient`;
     </linearGradient>
   </defs>
   <rect width="64" height="64" rx={logoMark.radius} fill={`url(#${gradientId})`}></rect>
-  <path class="logo-tick" d={logoMark.tick} pathLength="1"></path>
-  <path class="logo-head" d={logoMark.head} pathLength="1"></path>
+  <path class="logo-letter" d={logoMark.letter} stroke-width={logoMark.letterWidth}></path>
+  {logoMark.arrow.map((d) => <path class="logo-arrow" d={d} stroke-width={logoMark.arrowWidth} />)}
 </svg>
 
 <style>
   .logo-mark path {
     fill: none;
     stroke: #fff;
-    stroke-width: 6;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
